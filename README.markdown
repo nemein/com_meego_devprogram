@@ -1,21 +1,21 @@
-== Overview ==
+## Overview
 
 This web application [DevProgram from now] aims to bridge a gap between vendors
-who would like to promote their harware platforms and developers who are willing
+who would like to promote their hardware platforms and developers who are willing
 to get started with new development environments.
 
 Using DevProgram developers can easily see the offers from MeeGo vendors and
 apply to those that interest them.
 
-== Target Audience ==
+## Target Audience
 
-DevProgram targets every subscribed user of meego.com and does not
-differentiate among them. Only the administrational tasks are hidden and
+DevProgram targets every subscribed user of [meego.com](http://meego.com) and does not
+differentiate among them. Only the administrative tasks are hidden and
 available only to nominated administrators.
 
 See the next chapter on certain roles.
 
-== What does DevProgram do? ==
+## What does DevProgram do?
 
 DevProgram is a match making service. Users of DevProgram can act as vendors or
 developers at the same time. Let's see what these different roles mean.
@@ -35,7 +35,7 @@ hardware that can run MeeGo.
 
 * The vendor manages the available stocks using the web interface.
 
-== What we are not aiming at ==
+## What we are not aiming at
 
 DevProgram does not store personal information and does not act as a broker
 of such information between developers and vendors. If an application is
