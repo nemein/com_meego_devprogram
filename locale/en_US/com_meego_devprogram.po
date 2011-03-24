@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+
+"Project-Id-Version: com_meego_devprogram\n"
+"Report-Msgid-Bugs-To:\n"
+"PO-Revision-Date:\n"
+"Last-Translator:\n"
+"Language-Team: info <info@urho.eu>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "title_welcome"
+msgstr "Welcome!"
+
+msgid "introduction"
+msgstr "This site is a demo of DevProgram, a web application to help the participants of Meego Developer Device Programs. DevProgram aims to bridge a gap between vendors who would like to promote their hardware platforms and developers who are willing to get started with new development environments."
+
+
+

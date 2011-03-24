@@ -1,0 +1,16 @@
+version: 0.0.1
+
+#process_injector: com_meego_devprogram_injector
+#template_injector: com_meego_devprogram_injector
+
+requires:
+    midgardmvc_ui_forms:
+        - {type: github, user: bergie, repository: midgardmvc_ui_forms, branch: master}
+
+routes:
+    index:
+        path: /
+        controller: com_meego_devprogram_controllers_index
+        action: index
+        template_aliases:
+            content: cmd-index
