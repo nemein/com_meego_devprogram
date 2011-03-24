@@ -35,7 +35,7 @@ hardware that can run MeeGo.
 
 * The vendor manages the available stocks using the web interface.
 
-## What we are not aiming at
+## What we are not aiming at?
 
 DevProgram does not store personal information and does not act as a broker
 of such information between developers and vendors. If an application is
