@@ -41,6 +41,36 @@
      */
     public function inject_template(midgardmvc_core_request $request)
     {
+        // Replace the default MeeGo sidebar with our own
+        $route = $request->get_route();
+        $route->template_aliases['content-sidebar'] = 'cmd-sidebar';
+        #$route->template_aliases['main-menu'] = 'cmd-main_menu';
+
+        if ($this->mvc->authentication->is_user())
+        {
+            if ($this->mvc->authentication->get_user()->is_admin())
+            {
+                $request->set_data_item('admin', true);
+            /*
+                $admin_url = $this->mvc->dispatcher->generate_url
+                (
+                    'basecategories_admin_index', array(), $request
+                );
+
+                $request->set_data_item('category_admin_url', $category_admin_url);
+            */
+            }
+        }
+
+        $open_programs_url = $this->mvc->dispatcher->generate_url
+        (
+            'open_programs', array(), $request
+        );
+
+        $request->set_data_item('open_programs_url', $open_programs_url);
+
+        self::set_breadcrumb($request);
+
         $this->add_head_elements();
     }
 
@@ -58,6 +88,36 @@
                 'href' => MIDGARDMVC_STATIC_URL . '/' . $this->component . '/css/devprogram.css'
             )
         );
+    }
+
+    /**
+     * Sets the breadcrumb
+     *
+     * @param object midgardmvc_core_request  object to assign 'breadcrumb' for templates
+     */
+    public function set_breadcrumb(midgardmvc_core_request $request)
+    {
+        $nexturl = '';
+        $breadcrumb = array();
+
+        $cnt = 0;
+
+        foreach ($request->argv as $arg)
+        {
+            $nexturl .= '/' . $arg;
+
+            $item = array(
+                'title' => ucfirst($arg),
+                'localurl' => $nexturl,
+                'last' => (count($request->argv) - 1 == $cnt) ? true : false
+            );
+
+            $breadcrumb[] = $item;
+
+            ++$cnt;
+        }
+
+        $request->set_data_item('breadcrumb', $breadcrumb);
     }
 }
 ?>

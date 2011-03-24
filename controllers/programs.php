@@ -5,7 +5,7 @@
  * @copyright The Midgard Project, http://www.midgard-project.org
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
-class com_meego_devprogram_controllers_index
+class com_meego_devprogram_controllers_programs
 {
     var $mvc = null;
     var $request = null;
@@ -21,11 +21,20 @@ class com_meego_devprogram_controllers_index
     }
 
     /**
-     * Prepares and shows the index page (cmd-index)
+     * Prepares and shows the program list page (cmd-list-programs)
      *
      * @param array args (not used)
      */
-    public function get_index(array $args)
+    public function get_mylist(array $args)
+    {
+    }
+
+    /**
+     * Prepares and shows the program list page (cmd-list-programs)
+     *
+     * @param array args (not used)
+     */
+    public function get_list(array $args)
     {
     }
 }

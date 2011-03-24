@@ -1,0 +1,15 @@
+    <div tal:condition="true: com_meego_devprogram/my_applications" id="block-menu_block-1" class="block block-menu_block region-odd odd region-count-1 count-1 block-garage">
+
+        <h2 class="title" i18n:translate="'title_my_applications'">My Applications</h2>
+
+        <div class="content">
+            <div class="menu-block-1 menu-name-primary-links menu-level-2">
+                <ul class="menu">
+                    <li class="leaf first" tal:repeat="application com_meego_devprogram/my_applications">
+                        <a tal:attributes="href application/details_url">${application/name}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>

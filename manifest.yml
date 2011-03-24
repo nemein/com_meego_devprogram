@@ -14,3 +14,53 @@ routes:
         action: index
         template_aliases:
             content: cmd-index
+
+    open_programs:
+        path: /programs
+        controller: com_meego_devprogram_controllers_programs
+        action: list
+        template_aliases:
+            content: cmd-list-programs
+
+    closed_programs:
+        path: /programs/closed
+        controller: com_meego_devprogram_controllers_programs
+        action: list_closed
+        template_aliases:
+            content: cmd-list-programs
+
+    program_details:
+        path: /programs/{$program_name}
+        controller: com_meego_devprogram_controllers_programs
+        action: details
+        template_aliases:
+            content: cmd-program-details
+
+    program_applications:
+        path: /programs/{$program_name}/applications
+        controller: com_meego_devprogram_controllers_applications
+        action: applications_list
+        template_aliases:
+            content: cmd-applications
+
+    program_application_details:
+        path: /programs/{$program_name}/applications/{$application_name}
+        controller: com_meego_devprogram_controllers_applications
+        action: details
+        template_aliases:
+            content: cmd-application-details
+
+    myapplications:
+        path: /myapplications
+        controller: com_meego_devprogram_controllers_applications
+        action: mylist
+        template_aliases:
+            content: cmd-my-applications
+
+    myapplication_details:
+        path: /myapplications/{$application_name}
+        controller: com_meego_devprogram_controllers_applications
+        action: mydetails
+        template_aliases:
+            content: cmd-my-application-details
+

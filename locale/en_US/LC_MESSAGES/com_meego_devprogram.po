@@ -11,10 +11,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "title_welcome"
-msgstr "Welcome!"
+msgstr "Welcome to DevProgram!"
 
 msgid "introduction"
 msgstr "This site is a demo of DevProgram, a web application to help the participants of Meego Developer Device Programs. DevProgram aims to bridge a gap between vendors who would like to promote their hardware platforms and developers who are willing to get started with new development environments."
 
+msgid "title_menu"
+msgstr "Menu"
 
+msgid "title_open_programs"
+msgstr "Open Programs"
 
+msgid "title_my_applications"
+msgstr "My Applications"
+
+msgid "title_my_programs"
+msgstr "My Programs"
