@@ -19,22 +19,34 @@ class com_meego_devprogram_controllers_applications
     {
         $this->request = $request;
         $this->mvc = midgardmvc_core::get_instance();
+        $this->data['my_applications'] = false;
     }
 
     /**
      * Prepares and shows the my applications list page (cmd-my-applications)
      *
+     * Access: only users can list own applications
+     *
      * @param array args (not used)
      */
-    public function get_mylist(array $args)
+    public function get_my_applications_list(array $args)
     {
+        // check if is logged in
+        if (! $this->mvc->authentication->is_user())
+        {
+            return;
+        }
+
         $myapps = array(
-            'name' => 'test',
+            'name' => 'test1',
+            'title' => 'test application',
             'projectid' => 1,
             'projectidea' => 'blablabla',
-            'details_url' =>  $this->mvc->dispatcher->generate_url(
-                'myapplication_details',
-                array('application_name' => 'test'),
+            'guid' => 'abcdefaqbcdef',
+            'details_url' =>  $this->mvc->dispatcher->generate_url
+            (
+                'my_application_details',
+                array('application_guid' => 'abcdefaqbcdef'),
                 $this->request
             )
         );
@@ -44,10 +56,19 @@ class com_meego_devprogram_controllers_applications
     /**
      * Prepares and shows the my application details page (cmd-my-application-details)
      *
+     * Access: only owners of the application can see details
+     *
      * @param array args (not used)
      */
-    public function get_mydetails(array $args)
+    public function get_my_application_details(array $args)
     {
+        // check if is logged in
+        if (! $this->mvc->authentication->is_user())
+        {
+            return;
+        }
+        // check if user owns the program
+        // @todo
     }
 }
 

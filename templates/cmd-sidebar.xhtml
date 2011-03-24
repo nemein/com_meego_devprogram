@@ -18,10 +18,6 @@
 
 </div>
 
-<div class="section">
+<tal:block tal:content="structure php:midgardmvc.templating.dynamic_load('com_meego_devprogram', 'my_applications', array())"></tal:block>
 
-    <div id="block-menu_block-1" class="block block-menu_block region-odd odd region-count-1 count-1 block-garage"
-        tal:content="structure php:midgardmvc.templating.dynamic_load('com_meego_devprogram', 'myapplications', array())">
-    </div>
-
-</div>
+<tal:block tal:content="structure php:midgardmvc.templating.dynamic_load('com_meego_devprogram', 'my_programs', array())"></tal:block>

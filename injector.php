@@ -44,7 +44,7 @@
         // Replace the default MeeGo sidebar with our own
         $route = $request->get_route();
         $route->template_aliases['content-sidebar'] = 'cmd-sidebar';
-        #$route->template_aliases['main-menu'] = 'cmd-main_menu';
+        $route->template_aliases['main-menu'] = 'cmd-main-menu';
 
         if ($this->mvc->authentication->is_user())
         {
