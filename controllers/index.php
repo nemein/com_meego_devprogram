@@ -31,7 +31,6 @@ class com_meego_devprogram_controllers_index
         $this->mvc->i18n->set_language($default_language, false);
     }
 
-
     /**
      * Prepares and shows the index page (cmd-index)
      *
