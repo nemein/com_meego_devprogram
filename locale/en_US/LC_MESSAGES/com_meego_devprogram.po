@@ -27,3 +27,6 @@ msgstr "My Applications"
 
 msgid "title_my_programs"
 msgstr "My Programs"
+
+msgid "command_delete"
+msgstr "Delete"

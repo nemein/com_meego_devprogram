@@ -5,7 +5,14 @@
  * @copyright The Midgard Project, http://www.midgard-project.org
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
- class com_meego_devprogram_injector
+
+define('CMD_APPLICATION_PENDING', 0);
+define('CMD_APPLICATION_MOREINFO', 1);
+define('CMD_APPLICATION_CANCELLED', 2);
+define('CMD_APPLICATION_APPROVED', 8);
+define('CMD_APPLICATION_DECLINED', 9);
+
+class com_meego_devprogram_injector
 {
     var $component = 'com_meego_devprogram';
     var $mvc = null;

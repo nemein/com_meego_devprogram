@@ -36,6 +36,13 @@ routes:
         template_aliases:
             content: cmd-program-details
 
+    program_update:
+        path: /programs/{$program_name}/update
+        controller: com_meego_devprogram_controllers_programs
+        action: update
+        template_aliases:
+            content: cmd-edit-form
+
     program_applications:
         path: /programs/{$program_name}/applications
         controller: com_meego_devprogram_controllers_programs
@@ -44,7 +51,7 @@ routes:
             content: cmd-list-applications
 
     program_application_details:
-        path: /programs/{$program_name}/applications/{$application_guid}
+        path: /programs/{$program_name}/applications/{$guid:application_guid}
         controller: com_meego_devprogram_controllers_programs
         action: application_details
         template_aliases:
@@ -65,9 +72,15 @@ routes:
             content: cmd-my-applications
 
     my_application_details:
-        path: /myapplications/{$application_guid}
+        path: /myapplications/{$guid:application_guid}
         controller: com_meego_devprogram_controllers_applications
         action: my_application_details
         template_aliases:
             content: cmd-my-application-details
 
+    my_application_update:
+        path: /myapplications/{$guid:application_guid}/update
+        controller: com_meego_devprogram_controllers_applications
+        action: update
+        template_aliases:
+            content: cmd-edit-form

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema xmlns="http://www.midgard-project.org/repligard/1.4">
+
+    <type name="com_meego_devprogram_device" table="com_meego_devprogram_device">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="name" type="string">
+            <description>Name of the device</description>
+            <required>true</required>
+        </property>
+        <property name="model" type="string">
+            <description>Model of the device</description>
+        </property>
+        <property name="type" type="string">
+            <description>Type of the device (e.g. devboard, netbook, tablket, phone)</description>
+            <required>true</required>
+        </property>
+        <property name="description" type="longtext">
+            <description>Description of the device</description>
+        </property>
+        <property name="url" type="string">
+            <description>URL pointing to a product page</description>
+        </property>
+    </type>
+
+    <type name="com_meego_devprogram_program" table="com_meego_devprogram_program"  parent="com_meego_devprogram_device">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="name" type="string">
+            <description>Name of the developer device program. Must be unique.</description>
+            <required>true</required>
+        </property>
+        <property name="title" type="string">
+            <description>Title of the program (pretty name)</description>
+            <required>true</required>
+        </property>
+        <property name="duedate" type="datetime">
+            <description>Due date of the program</description>
+            <required>true</required>
+        </property>
+        <property name="device" type="unsigned integer" link="com_meego_devprogram_device:id" parentfield="device">
+            <description>The device id of which this program is meant for</description>
+            <required>true</required>
+        </property>
+        <property name="quantity" type="unsigned integer">
+            <description>Amount of devices offered within the program</description>
+            <required>true</required>
+        </property>
+        <property name="discount" type="float">
+            <description>Discount percentage (e.g. relative to the retail price)</description>
+            <required>true</required>
+        </property>
+        <property name="nature" type="string">
+            <description>Nature of the device program</description>
+        </property>
+        <property name="url" type="string">
+            <description>URL pointing to a page with more details about the program (e.g. a vendor's page)</description>
+        </property>
+    </type>
+
+    <type name="com_meego_devprogram_application" table="com_meego_devprogram_application" parent="com_meego_devprogram_program">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="program" type="unsigned integer" link="com_meego_devprogram_program:id" parentfield="program">
+            <description>Developer device program this application is submitted for</description>
+            <required>true</required>
+        </property>
+        <property name="summary" type="string">
+            <description>Short description of the idea represented by the application</description>
+            <required>true</required>
+        </property>
+        <property name="plan" type="longtext">
+            <description>Longer description of the plan with the device</description>
+            <required>true</required>
+        </property>
+        <property name="project" type="string">
+            <description>Name of the project (if any)</description>
+        </property>
+        <property name="team" type="string">
+            <description>Name of the team (if any)</description>
+        </property>
+        <property name="url" type="string">
+            <description>URL pointing to a page that backs up the application (e.g. a project page)</description>
+        </property>
+        <!-- these are filled in by vendors -->
+        <property name="status" type="integer">
+            <description>Acceptance status (0: pending, 1: need more info, 2: cancelled, 8: approved, 9: declined)</description>
+        </property>
+        <property name="devicesn" type="string">
+            <description>Serial number of the assigned device (if application is approved)</description>
+        </property>
+        <property name="remarks" type="longtext">
+            <description>Remarks from the vendor</description>
+        </property>
+    </type>
+
+</Schema>

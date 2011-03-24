@@ -5,7 +5,7 @@
  * @copyright The Midgard Project, http://www.midgard-project.org
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  */
-class com_meego_devprogram_controllers_programs
+class com_meego_devprogram_controllers_programs extends midgardmvc_core_controllers_baseclasses_crud
 {
     var $mvc = null;
     var $request = null;
@@ -21,6 +21,66 @@ class com_meego_devprogram_controllers_programs
         $this->mvc = midgardmvc_core::get_instance();
         $this->data['programs'] = false;
         $this->data['my_programs'] = false;
+    }
+
+    /**
+     * Loads a program
+     */
+    public function load_object(array $args)
+    {
+        $this->object = com_meego_devprogram_utils::get_program_by_name($args['program_name']);
+
+        if (is_object($this->object))
+        {
+            midgardmvc_core::get_instance()->head->set_title($this->object->title);
+        }
+    }
+
+    /**
+     * Prepare a new program
+     */
+    public function prepare_new_object(array $args)
+    {
+        $this->object = new com_meego_devprogram_program();
+    }
+
+    /**
+     * Returns a read url for a program
+     */
+    public function get_url_read()
+    {
+        return midgardmvc_core::get_instance()->dispatcher->generate_url
+        (
+            'program_details',
+            array
+            (
+                'program_name' => $this->object->name
+            ),
+            $this->request
+        );
+    }
+
+    /**
+     * Returns an update url for a program
+     */
+    public function get_url_update()
+    {
+        return midgardmvc_core::get_instance()->dispatcher->generate_url
+        (
+            'my_program_update', array
+            (
+                'program_name' => $this->object->name
+            ),
+            $this->request
+        );
+    }
+
+    /**
+     * Loads a form
+     */
+    public function load_form()
+    {
+        $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false);
     }
 
     /**
@@ -50,7 +110,6 @@ class com_meego_devprogram_controllers_programs
         );
         $this->data['my_programs'][] = $myprograms;
     }
-
 
     /**
      * Prepares and shows the program details page (cmd-program-details)
