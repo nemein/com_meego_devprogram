@@ -11,6 +11,11 @@
         </property>
         <property name="name" type="string">
             <description>Name of the device</description>
+            <readonly>true</readonly>
+        </property>
+        <property name="title" type="string">
+            <description>Title of the device (pretty name)</description>
+            <property>dcterms:title</property>
             <required>true</required>
         </property>
         <property name="model" type="string">
