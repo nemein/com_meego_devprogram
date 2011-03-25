@@ -62,6 +62,13 @@ class com_meego_devprogram_injector
         {
             $request->set_data_item('user', true);
 
+            $create_device_url = $this->mvc->dispatcher->generate_url
+            (
+                'device_create', array(), $request
+            );
+
+            $request->set_data_item('create_device_url', $create_device_url);
+
             $create_program_url = $this->mvc->dispatcher->generate_url
             (
                 'program_create', array(), $request
