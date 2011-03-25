@@ -50,12 +50,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_url_read()
     {
-        return midgardmvc_core::get_instance()->dispatcher->generate_url
-        (
-            'program_read',
-            array('program_name' => $this->object->name),
-            $this->request
-        );
+        return com_meego_devprogram_utils::get_url('program_read', array('program_name' => $this->object->name));
     }
 
     /**
@@ -63,14 +58,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_url_update()
     {
-        return midgardmvc_core::get_instance()->dispatcher->generate_url
-        (
-            'my_program_update', array
-            (
-                'program_name' => $this->object->name
-            ),
-            $this->request
-        );
+        return com_meego_devprogram_utils::get_url('program_update', array('program_name' => $this->object->name));
     }
 
     /**
@@ -78,6 +66,10 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function load_form()
     {
+        $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false, 'label_program_', 'tip_program_');
+        $this->form->set_submit('form-submit', $this->mvc->i18n->get('command_save'));
+/*
+
         $this->form = midgardmvc_helper_forms::create('com_meego_devprogram_program');
 
         $name = $this->form->add_field('name', 'text', true);
@@ -144,6 +136,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         $widget->set_label($this->mvc->i18n->get('label_url'));
 
         // @todo: add url tip
+*/
     }
 
     /**
@@ -166,19 +159,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             return false;
         }
 
-        $myprograms = array(
-            'name' => 'test1',
-            'title' => 'test program',
-            'projectid' => 1,
-            'projectidea' => 'blablabla',
-            'details_url' =>  $this->mvc->dispatcher->generate_url
-            (
-                'program_read',
-                array('program_name' => 'test'),
-                $this->request
-            )
-        );
-        $this->data['my_programs'][] = $myprograms;
+        $this->data['my_programs'] = com_meego_devprogram_progutils::get_open_programs_of_current_user();
     }
 
     /**
@@ -191,8 +172,18 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_read(array $args)
     {
-        // set owner flag
-        // @todo
+        $this->load_object($args);
+
+        $this->load_form();
+
+        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object->guid))
+        {
+            $this->form->set_readonly(true);
+        }
+
+        $this->form->set_action(self::get_url_update());
+
+        $this->data['form'] =& $this->form;
     }
 
     /**
@@ -204,6 +195,8 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_open_programs_list(array $args)
     {
+        $this->data['type'] = 'open';
+        $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
         $this->data['programs'] = com_meego_devprogram_progutils::get_open_programs();
     }
 
@@ -216,7 +209,9 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_closed_programs_list(array $args)
     {
-        $this->data['programs'] = com_meego_devprogram_progutils::get_closed_programs();
+        $this->data['type'] = 'closed';
+        $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
+        $this->data['programs'] = com_meego_devprogram_progutils::get_closed_programs(true);
     }
 
     /**
