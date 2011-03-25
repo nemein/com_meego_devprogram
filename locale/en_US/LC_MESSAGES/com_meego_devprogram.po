@@ -22,14 +22,20 @@ msgstr "Menu"
 msgid "title_open_programs"
 msgstr "Open Programs"
 
+msgid "title_create_device"
+msgstr "Create Device"
+
 msgid "title_create_program"
 msgstr "Create Program"
 
-msgid "title_my_applications"
-msgstr "My Applications"
+msgid "title_my_devices"
+msgstr "My Devices"
 
 msgid "title_my_programs"
 msgstr "My Programs"
+
+msgid "title_my_applications"
+msgstr "My Applications"
 
 msgid "command_delete"
 msgstr "Delete"
@@ -37,11 +43,62 @@ msgstr "Delete"
 msgid "label_name"
 msgstr "Name"
 
+msgid "tip_name_device"
+msgstr "Name of the device. It is used in URLs, so it must be unique"
+
+msgid "tip_name_program"
+msgstr "Name of the develoepr device program. It is used in URLs, so it must be unique"
+
 msgid "label_title"
 msgstr "Title"
+
+msgid "tip_title"
+msgstr "Title is the pretty name of the developer device program"
+
+msgid "label_summary"
+msgstr "Summary"
+
+msgid "tip_summary_program"
+msgstr "Short summary of the program that is shown in the programs' list"
+
+msgid "tip_summary_application"
+msgstr "Short summary of the application that is shown for vendors"
+
+msgid "label_description"
+msgstr "Description"
+
+msgid "tip_description_device"
+msgstr "Details about the device"
+
+msgid "tip_description_program"
+msgstr "Details about the developer device program"
 
 msgid "label_device"
 msgstr "Device"
 
 msgid "label_duedate"
-msgstr "Due Date"
+msgstr "Due date of applications"
+
+msgid "label_model"
+msgstr "Device Model"
+
+msgid "tip_model_device"
+msgstr "Model of the device, e.g. N900"
+
+msgid "label_type"
+msgstr "Device Type"
+
+msgid "tip_type_device"
+msgstr "The type of the device, e.g. netbook, tablet, handset"
+
+msgid "label_url"
+msgstr "URL"
+
+msgid "tip_url_device"
+msgstr "Link to a page showing more details on the device"
+
+msgid "tip_url_program"
+msgstr "Link to a page showing more details on the developer device program"
+
+msgid "tip_url_application"
+msgstr "Link to a page showing more details on the application"
