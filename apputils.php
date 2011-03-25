@@ -83,6 +83,6 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
             return null;
         }
 
-        return self::get_applications_by_creator_guid($user->guid);
+        return self::get_applications_by_creator_guid($user->person);
     }
 }
