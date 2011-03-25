@@ -1,4 +1,4 @@
-<div class="section" tal:condition="true: com_meego_devprogram/my_programs">
+<div class="section" tal:condition="true: com_meego_devprogram/user_has_device">
     <div id="block-menu_block-1" class="block block-menu_block region-odd odd region-count-1 count-1 block-garage">
 
         <h2 class="title" i18n:translate="'title_my_programs'">My Programs</h2>
@@ -6,7 +6,13 @@
         <div class="content">
             <div class="menu-block-1 menu-name-primary-links menu-level-2">
                 <ul class="menu">
-                    <li class="leaf first" tal:repeat="program com_meego_devprogram/my_programs">
+                    <tal:block tal:condition="user">
+                    <li class="leaf last" tal:condition="create_program_url">
+                        <a tal:attributes="href create_program_url" i18n:translate="'title_create_program'"></a>
+                    </li>
+                    </tal:block>
+
+                    <li class="leaf first"  tal:condition="true: com_meego_devprogram/my_programs" tal:repeat="program com_meego_devprogram/my_programs">
                         <a tal:attributes="href program/details_url">${program/title}</a>
                     </li>
                 </ul>
