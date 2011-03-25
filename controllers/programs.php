@@ -19,6 +19,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     {
         $this->request = $request;
         $this->mvc = midgardmvc_core::get_instance();
+        $this->data['user_has_device'] = false;
         $this->data['programs'] = false;
         $this->data['my_programs'] = false;
     }
@@ -28,7 +29,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function load_object(array $args)
     {
-        $this->object = com_meego_devprogram_utils::get_program_by_name($args['program_name']);
+        $this->object = com_meego_devprogram_progutils::get_program_by_name($args['program_name']);
 
         if (is_object($this->object))
         {
@@ -84,12 +85,30 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         $widget = $name->set_widget('text');
         $widget->set_label($this->mvc->i18n->get('label_name'));
 
+        // @todo: add name tip
+
         $title = $this->form->add_field('title', 'text', true);
         $title->set_value($this->object->title);
         $widget = $title->set_widget('text');
         $widget->set_label($this->mvc->i18n->get('label_title'));
 
-        $devices = com_meego_devprogram_utils::get_devices();
+        // @todo: add title tip
+
+        $summary = $this->form->add_field('description', 'text', true);
+        $summary->set_value($this->object->description);
+        $widget = $summary->set_widget('textarea');
+        $widget->set_label($this->mvc->i18n->get('label_summary'));
+
+        // @todo: add summary tip
+
+        $description = $this->form->add_field('description', 'text', true);
+        $description->set_value($this->object->description);
+        $widget = $description->set_widget('html');
+        $widget->set_label($this->mvc->i18n->get('label_description'));
+
+        // @todo: add description tip
+
+        $devices = com_meego_devprogram_devutils::get_devices();
         foreach ($devices as $device)
         {
             $device_options[] = array
@@ -104,6 +123,8 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         $widget->set_label($this->mvc->i18n->get('label_device'));
         $widget->set_options($device_options);
 
+        // @todo: add device tip
+
         $duedate = $this->form->add_field('duedate', 'datetime', true);
         $object_end = $this->object->duedate;
         if ($object_end->getTimestamp() <= 0)
@@ -114,6 +135,15 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         $duedate->set_value($object_end);
         $widget = $duedate->set_widget('date');
         $widget->set_label($this->mvc->i18n->get('label_duedate'));
+
+        // @todo: add due date tip
+
+        $url = $this->form->add_field('url', 'url', true);
+        $url->set_value($this->object->url);
+        $widget = $url->set_widget('text');
+        $widget->set_label($this->mvc->i18n->get('label_url'));
+
+        // @todo: add url tip
     }
 
     /**
@@ -127,6 +157,13 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         if (! $this->mvc->authentication->is_user())
         {
             return;
+        }
+
+        $this->data['user_has_device'] = com_meego_devprogram_devutils::user_has_device();
+
+        if (! $this->data['user_has_device'])
+        {
+            return false;
         }
 
         $myprograms = array(
@@ -167,7 +204,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_open_programs_list(array $args)
     {
-        $this->data['programs'] = com_meego_devprogram_utils::get_open_programs();
+        $this->data['programs'] = com_meego_devprogram_progutils::get_open_programs();
     }
 
     /**
@@ -179,7 +216,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_closed_programs_list(array $args)
     {
-        $this->data['programs'] = com_meego_devprogram_utils::get_closed_programs();
+        $this->data['programs'] = com_meego_devprogram_progutils::get_closed_programs();
     }
 
     /**
@@ -218,5 +255,4 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         // @todo
     }
 }
-
 ?>
