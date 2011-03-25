@@ -44,9 +44,54 @@ class com_meego_devprogram_utils
 
         if (count($users))
         {
-            $guid = $users[0]->person_guid;
+            $guid = $users[0]->person;
         }
 
         return $guid;
+    }
+
+    /**
+     * Returns urls based on routes
+     *
+     * @param string route
+     * @param array arguments of the action
+     * @return string url
+     */
+    public function get_url($route = '', $args)
+    {
+        $mvc = midgardmvc_core::get_instance();
+        return $mvc->dispatcher->generate_url($route, $args, $mvc->dispatcher->get_request());
+    }
+
+    /**
+     * Checks if the currently logged in user is a creator of the object
+     * or an administrator
+     *
+     * @param guid guid of any object
+     * @return boolean
+     */
+    public function is_current_user_creator_or_admin($guid = '')
+    {
+        $retval = false;
+
+        $mvc = midgardmvc_core::get_instance();
+
+        if ($mvc->authentication->is_user())
+        {
+            if ($mvc->authentication->get_user()->is_admin())
+            {
+                $retval = true;
+            }
+            elseif (mgd_is_guid($guid))
+            {
+                $object = midgard_object::get_by_guid($guid);
+                if ($object->metadata->creator == $guid)
+                {
+                    $retval = true;
+                }
+            }
+        }
+
+        return $retval;
     }
 }
