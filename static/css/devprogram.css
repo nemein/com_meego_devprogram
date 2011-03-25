@@ -1,3 +1,5 @@
+div.info,
+form.delete,
 div.edit {
 margin: 1em 0 0 0;
 }
@@ -7,9 +9,42 @@ margin: 0 0 1em 0;
 display: block;
 }
 
+div.edit select,
 div.edit textarea,
 div.edit input {
 margin: 0.2em 0 0 0;
 display: block;
+min-width: 15em;
 }
 
+div.edit textarea.description {
+width: 40em;
+height: 15em;
+}
+
+div.edit input.form-submit {
+min-width: 5em;
+}
+
+div.details {
+margin: 1em;
+border-top: 1px dashed lightgrey;
+}
+
+ul.programs {
+margin: 0 0 0 1em;
+padding: 0;
+}
+
+ul.programs li.program {
+list-style: none;
+border-bottom: 1px dashed lightgrey;
+padding: 0 0 2em 0;
+}
+
+div.actions {
+display: inline-block;
+position: relative;
+bottom: 1em;
+float: right;
+}
