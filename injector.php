@@ -103,8 +103,8 @@ class com_meego_devprogram_injector
     private function add_head_elements()
     {
         // enable jQuery and jQuery UI
-        midgardmvc_core::get_instance()->head->enable_jquery();
-        midgardmvc_core::get_instance()->head->enable_jquery_ui();
+        $this->mvc->head->enable_jquery();
+        $this->mvc->head->enable_jquery_ui();
 
         // pimp the date input fields
         $this->mvc->head->add_jsfile(MIDGARDMVC_STATIC_URL . '/' . $this->component . '/js/datetimes.js');
