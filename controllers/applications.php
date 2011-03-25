@@ -45,15 +45,10 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
      */
     public function get_url_read()
     {
-        return midgardmvc_core::get_instance()->dispatcher->generate_url
-        (
+        return com_meego_devprogram_utils::get_url(
             'my_application_details',
-            array
-            (
-                'application_guid' => $this->object->guid
-            ),
-            $this->request
-        );
+            array('application_guid' => $this->object->guid
+        ));
     }
 
     /**
@@ -61,14 +56,10 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
      */
     public function get_url_update()
     {
-        return midgardmvc_core::get_instance()->dispatcher->generate_url
-        (
-            'my_application_update', array
-            (
-                'application_guid' => $this->object->guid
-            ),
-            $this->request
-        );
+        return com_meego_devprogram_utils::get_url(
+            'my_application_update',
+            array('application_guid' => $this->object->guid
+        ));
     }
 
     /**
