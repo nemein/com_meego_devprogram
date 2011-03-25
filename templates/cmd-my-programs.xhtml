@@ -13,7 +13,7 @@
                     </tal:block>
 
                     <li class="leaf first"  tal:condition="true: com_meego_devprogram/my_programs" tal:repeat="program com_meego_devprogram/my_programs">
-                        <a tal:attributes="href program/details_url">${program/title}</a>
+                        <a tal:attributes="href program/read_url">${program/title}</a>
                     </li>
                 </ul>
             </div>

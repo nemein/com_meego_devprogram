@@ -19,8 +19,8 @@ msgstr "This site is a demo of DevProgram, a web application to help the partici
 msgid "title_menu"
 msgstr "Menu"
 
-msgid "title_open_programs"
-msgstr "Open Programs"
+msgid "title_list_open_programs"
+msgstr "List Open Programs"
 
 msgid "title_create_device"
 msgstr "Create Device"
@@ -40,65 +40,125 @@ msgstr "My Applications"
 msgid "command_delete"
 msgstr "Delete"
 
-msgid "label_name"
+msgid "command_save"
+msgstr "Save"
+
+msgid "command_submit"
+msgstr "Submit"
+
+msgid "label_device_name"
+msgstr "Device name"
+
+msgid "label_program_name"
 msgstr "Name"
 
-msgid "tip_name_device"
+msgid "tip_device_name"
 msgstr "Name of the device. It is used in URLs, so it must be unique"
 
-msgid "tip_name_program"
+msgid "tip_program_name"
 msgstr "Name of the develoepr device program. It is used in URLs, so it must be unique"
 
-msgid "label_title"
+msgid "label_program_title"
 msgstr "Title"
 
-msgid "tip_title"
+msgid "tip_program_title"
 msgstr "Title is the pretty name of the developer device program"
 
-msgid "label_summary"
+msgid "label_program_summary"
 msgstr "Summary"
 
-msgid "tip_summary_program"
+msgid "tip_program_summary"
 msgstr "Short summary of the program that is shown in the programs' list"
 
-msgid "tip_summary_application"
+msgid "tip_application_summary"
 msgstr "Short summary of the application that is shown for vendors"
 
-msgid "label_description"
+msgid "label_device_title"
+msgstr "Title"
+
+msgid "tip_device_title"
+msgstr "Pretty name of the device that will be used accross these pages"
+
+msgid "label_device_description"
 msgstr "Description"
 
-msgid "tip_description_device"
+msgid "label_program_description"
+msgstr "Description"
+
+msgid "tip_device_description"
 msgstr "Details about the device"
 
-msgid "tip_description_program"
+msgid "tip_program_description"
 msgstr "Details about the developer device program"
 
-msgid "label_device"
+msgid "label_program_device"
 msgstr "Device"
 
-msgid "label_duedate"
+msgid "label_program_duedate"
 msgstr "Due date of applications"
 
-msgid "label_model"
-msgstr "Device Model"
+msgid "tip_program_duedate"
+msgstr "The day when the developer device program ends"
 
-msgid "tip_model_device"
+msgid "label_device_model"
+msgstr "Device model"
+
+msgid "tip_device_model"
 msgstr "Model of the device, e.g. N900"
 
-msgid "label_type"
-msgstr "Device Type"
+msgid "label_device_type"
+msgstr "Device type"
 
-msgid "tip_type_device"
+msgid "tip_device_type"
 msgstr "The type of the device, e.g. netbook, tablet, handset"
 
-msgid "label_url"
+msgid "label_device_url"
+msgstr "URL for more info"
+
+msgid "label_program_url"
 msgstr "URL"
 
-msgid "tip_url_device"
+msgid "label_application_url"
+msgstr "URL"
+
+msgid "tip_device_url"
 msgstr "Link to a page showing more details on the device"
 
-msgid "tip_url_program"
+msgid "tip_program_url"
 msgstr "Link to a page showing more details on the developer device program"
 
-msgid "tip_url_application"
+msgid "tip_application_url"
 msgstr "Link to a page showing more details on the application"
+
+msgid "question_delete"
+msgstr "Are you sure you want to delete the device called: ${device_name}?"
+
+msgid "feedback_can_not_delete_device"
+msgstr "The device can not be deleted, because it is assigned to one or more open developer device program(s)."
+
+msgid "command_back_to_index"
+msgstr "Back to index"
+
+msgid "feedback_no_programs"
+msgstr "There is no ${type} developer device program at the moment. Please check again later!"
+
+msgid "command_read_details"
+msgstr "Details"
+
+msgid "label_program_quantity"
+msgstr "Quantity"
+
+msgid "tip_program_quantity"
+msgstr "The amount of devices offered withinthe program"
+
+msgid "label_program_discount"
+msgstr "Discount percentage"
+
+msgid "tip_program_discount"
+msgstr "Discount percentage (e.g. relative to the retail price)"
+
+msgid "label_program_nature"
+msgstr "The nature of the program"
+
+msgid "tip_program_nature"
+msgstr "The nature of the program"

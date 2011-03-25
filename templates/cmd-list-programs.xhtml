@@ -1,3 +1,20 @@
-<div class="status">
-todo: show the list of open programs
+<div class="info" tal:condition="not: com_meego_devprogram/programs">
+    <div class="status" i18n:translate="'feedback_no_programs'">
+        <tal:block i18n:name="type">${com_meego_devprogram/type}</tal:block>
+    </div>
+    <a class="back" tal:attributes="href com_meego_devprogram/index_url" i18n:translate="'command_back_to_index'"></a>
+</div>
+
+<div class="list" tal:condition="true: com_meego_devprogram/programs">
+    <ul class="programs">
+        <li class="program" tal:repeat="program com_meego_devprogram/programs">
+            <div class="brief">
+                    <h3>${program/title}</h3>
+                    <div class="summary">${program/summary}</div>
+            </div>
+            <div class="actions">
+                <a class="action" tal:attributes="href program/read_url" i18n:translate="'command_read_details'"></a>
+            </div>
+        </li>
+    </ul>
 </div>

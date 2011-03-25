@@ -1,5 +1,16 @@
-<form method="post">
-    <input type="submit" name="delete" i18n:translate="'command_delete'" />
-</form>
+<tal:block tal:condition="not: com_meego_devprogram/can_not_delete">
+    <form class="delete" method="post">
+        <h3 class="confirmation" tal:content="com_meego_devprogram/delete_question"></h3>
+        <input class="form-submit" type="submit" name="delete" i18n:attributes="value command_delete" />
+    </form>
+</tal:block>
 
-<mgd:include>cmd-edit-form</mgd:include>
+<div class="info" tal:condition="true: com_meego_devprogram/can_not_delete">
+    <div class="status" i18n:translate="'feedback_can_not_delete_device'"></div>
+    <a class="back" tal:attributes="href com_meego_devprogram/index_url" i18n:translate="'command_back_to_index'"></a>
+</div>
+
+<div class="details">
+    <h4 i18n:translate="'tip_device_description'"></h4>
+    <mgd:include>cmd-edit-form</mgd:include>
+</div>
