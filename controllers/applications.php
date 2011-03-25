@@ -93,7 +93,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         {
             return;
         }
-        $this->data['my_applications'] = com_meego_devprogram_utils::get_applications_of_current_user();
+        $this->data['my_applications'] = com_meego_devprogram_apputils::get_applications_of_current_user();
     }
 
     /**
@@ -132,5 +132,4 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         // @todo
     }
 }
-
 ?>
