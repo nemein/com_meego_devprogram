@@ -15,6 +15,34 @@ routes:
         template_aliases:
             content: cmd-index
 
+    device_create:
+        path: /device/create
+        controller: com_meego_devprogram_controllers_devices
+        action: create
+        template_aliases:
+            content: cmd-edit-form
+
+    device_read:
+        path: /device/{$device_name}/read
+        controller: com_meego_devprogram_controllers_devices
+        action: read
+        template_aliases:
+            content: cmd-device-details
+
+    device_update:
+        path: /device/{$device_name}/update
+        controller: com_meego_devprogram_controllers_devices
+        action: update
+        template_aliases:
+            content: cmd-edit-form
+
+    device_delete:
+        path: /device/{$device_name}/delete
+        controller: com_meego_devprogram_controllers_devices
+        action: delete
+        template_aliases:
+            content: cmd-delete-form
+
     open_programs:
         path: /programs
         controller: com_meego_devprogram_controllers_programs
@@ -70,6 +98,13 @@ routes:
         action: application_details
         template_aliases:
             content: cmd-application-details
+
+    my_devices:
+        path: /mydevices
+        controller: com_meego_devprogram_controllers_devices
+        action: my_devices_list
+        template_aliases:
+            content: cmd-my-devices
 
     my_programs:
         path: /myprograms
