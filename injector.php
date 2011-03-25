@@ -41,6 +41,8 @@ class com_meego_devprogram_injector
         $request->add_component_to_chain($this->mvc->component->get($this->component), true);
         // Default title
         $this->mvc->head->set_title($this->mvc->i18n->get('title_welcome'));
+
+        $request->set_data_item('user', false);
     }
 
     /**
@@ -53,22 +55,27 @@ class com_meego_devprogram_injector
         $route->template_aliases['content-sidebar'] = 'cmd-sidebar';
         $route->template_aliases['main-menu'] = 'cmd-main-menu';
 
+        // set user flag
+        // set create program url for the menu in the sidebar
+        // set admin flag to have extra functionality later on
         if ($this->mvc->authentication->is_user())
         {
+            $request->set_data_item('user', true);
+
+            $create_program_url = $this->mvc->dispatcher->generate_url
+            (
+                'program_create', array(), $request
+            );
+
+            $request->set_data_item('create_program_url', $create_program_url);
+
             if ($this->mvc->authentication->get_user()->is_admin())
             {
                 $request->set_data_item('admin', true);
-            /*
-                $admin_url = $this->mvc->dispatcher->generate_url
-                (
-                    'basecategories_admin_index', array(), $request
-                );
-
-                $request->set_data_item('category_admin_url', $category_admin_url);
-            */
             }
         }
 
+        // set open programs url for the menu in the sidebar
         $open_programs_url = $this->mvc->dispatcher->generate_url
         (
             'open_programs', array(), $request
@@ -76,8 +83,10 @@ class com_meego_devprogram_injector
 
         $request->set_data_item('open_programs_url', $open_programs_url);
 
+        // breadcrumb update
         self::set_breadcrumb($request);
 
+        // add some js and css  to html head if needed
         $this->add_head_elements();
     }
 
@@ -86,6 +95,25 @@ class com_meego_devprogram_injector
      */
     private function add_head_elements()
     {
+        // enable jQuery and jQuery UI
+        midgardmvc_core::get_instance()->head->enable_jquery();
+        midgardmvc_core::get_instance()->head->enable_jquery_ui();
+
+        // pimp the date input fields
+        $this->mvc->head->add_jsfile(MIDGARDMVC_STATIC_URL . '/' . $this->component . '/js/datetimes.js');
+
+        // jQuery UI CSS
+        $this->mvc->head->add_link
+        (
+            array
+            (
+                'rel' => 'stylesheet',
+                'type' => 'text/css',
+                'href' => MIDGARDMVC_STATIC_URL . '/' . $this->component . '/css/devprogram-theme/jquery.ui.all.css'
+            )
+        );
+
+        // our CSS
         $this->mvc->head->add_link
         (
             array
@@ -99,6 +127,7 @@ class com_meego_devprogram_injector
 
     /**
      * Sets the breadcrumb
+     * A bit lame way though...
      *
      * @param object midgardmvc_core_request  object to assign 'breadcrumb' for templates
      */

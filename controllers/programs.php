@@ -51,11 +51,8 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     {
         return midgardmvc_core::get_instance()->dispatcher->generate_url
         (
-            'program_details',
-            array
-            (
-                'program_name' => $this->object->name
-            ),
+            'program_read',
+            array('program_name' => $this->object->name),
             $this->request
         );
     }
@@ -80,7 +77,43 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function load_form()
     {
-        $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false);
+        $this->form = midgardmvc_helper_forms::create('com_meego_devprogram_program');
+
+        $name = $this->form->add_field('name', 'text', true);
+        $name->set_value($this->object->name);
+        $widget = $name->set_widget('text');
+        $widget->set_label($this->mvc->i18n->get('label_name'));
+
+        $title = $this->form->add_field('title', 'text', true);
+        $title->set_value($this->object->title);
+        $widget = $title->set_widget('text');
+        $widget->set_label($this->mvc->i18n->get('label_title'));
+
+        $devices = com_meego_devprogram_utils::get_devices();
+        foreach ($devices as $device)
+        {
+            $device_options[] = array
+            (
+                'description' => $device->name,
+                'value' => $device->id
+            );
+        }
+        $device = $this->form->add_field('device', 'integer');
+        $device->set_value($this->object->device);
+        $widget = $device->set_widget('selectoption');
+        $widget->set_label($this->mvc->i18n->get('label_device'));
+        $widget->set_options($device_options);
+
+        $duedate = $this->form->add_field('duedate', 'datetime', true);
+        $object_end = $this->object->duedate;
+        if ($object_end->getTimestamp() <= 0)
+        {
+            $new_end = new DateTime('last day of next month');
+            $object_end->setTimestamp($new_end->getTimestamp());
+        }
+        $duedate->set_value($object_end);
+        $widget = $duedate->set_widget('date');
+        $widget->set_label($this->mvc->i18n->get('label_duedate'));
     }
 
     /**
@@ -103,7 +136,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             'projectidea' => 'blablabla',
             'details_url' =>  $this->mvc->dispatcher->generate_url
             (
-                'program_details',
+                'program_read',
                 array('program_name' => 'test'),
                 $this->request
             )
@@ -119,7 +152,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      *
      * @param array args (not used)
      */
-    public function get_program_details(array $args)
+    public function get_read(array $args)
     {
         // set owner flag
         // @todo
@@ -134,6 +167,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_open_programs_list(array $args)
     {
+        $this->data['programs'] = com_meego_devprogram_utils::get_open_programs();
     }
 
     /**
@@ -145,6 +179,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_closed_programs_list(array $args)
     {
+        $this->data['programs'] = com_meego_devprogram_utils::get_closed_programs();
     }
 
     /**

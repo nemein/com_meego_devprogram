@@ -1,0 +1,15 @@
+div.edit {
+margin: 1em 0 0 0;
+}
+
+div.edit label {
+margin: 0 0 1em 0;
+display: block;
+}
+
+div.edit textarea,
+div.edit input {
+margin: 0.2em 0 0 0;
+display: block;
+}
+

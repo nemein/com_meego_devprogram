@@ -2,6 +2,10 @@
 <Schema xmlns="http://www.midgard-project.org/repligard/1.4">
 
     <type name="com_meego_devprogram_device" table="com_meego_devprogram_device">
+        <user_values>
+            <typeof>http://rdfs.org/sioc/ns#Forum</typeof>
+            <namespaces>sioc:http://rdfs.org/sioc/ns#,dcterms:http://purl.org/dc/terms/</namespaces>
+        </user_values>
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>
@@ -18,13 +22,19 @@
         </property>
         <property name="description" type="longtext">
             <description>Description of the device</description>
+            <contenttype>html</contenttype>
         </property>
         <property name="url" type="string">
             <description>URL pointing to a product page</description>
+            <contenttype>url</contenttype>
         </property>
     </type>
 
     <type name="com_meego_devprogram_program" table="com_meego_devprogram_program"  parent="com_meego_devprogram_device">
+        <user_values>
+            <typeof>http://rdfs.org/sioc/ns#Forum</typeof>
+            <namespaces>sioc:http://rdfs.org/sioc/ns#,dcterms:http://purl.org/dc/terms/</namespaces>
+        </user_values>
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>
@@ -34,7 +44,16 @@
         </property>
         <property name="title" type="string">
             <description>Title of the program (pretty name)</description>
+            <property>dcterms:title</property>
             <required>true</required>
+        </property>
+        <property name="summary" type="string">
+            <description>Short description of the developer device program</description>
+            <required>true</required>
+        </property>
+        <property name="description" type="longtext">
+            <description>Long description of the device program</description>
+            <contenttype>html</contenttype>
         </property>
         <property name="duedate" type="datetime">
             <description>Due date of the program</description>
@@ -57,10 +76,15 @@
         </property>
         <property name="url" type="string">
             <description>URL pointing to a page with more details about the program (e.g. a vendor's page)</description>
+            <contenttype>url</contenttype>
         </property>
     </type>
 
     <type name="com_meego_devprogram_application" table="com_meego_devprogram_application" parent="com_meego_devprogram_program">
+        <user_values>
+            <typeof>http://rdfs.org/sioc/ns#Forum</typeof>
+            <namespaces>sioc:http://rdfs.org/sioc/ns#,dcterms:http://purl.org/dc/terms/</namespaces>
+        </user_values>
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>
@@ -84,6 +108,7 @@
         </property>
         <property name="url" type="string">
             <description>URL pointing to a page that backs up the application (e.g. a project page)</description>
+            <contenttype>url</contenttype>
         </property>
         <!-- these are filled in by vendors -->
         <property name="status" type="integer">

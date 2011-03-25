@@ -22,6 +22,9 @@ msgstr "Menu"
 msgid "title_open_programs"
 msgstr "Open Programs"
 
+msgid "title_create_program"
+msgstr "Create Program"
+
 msgid "title_my_applications"
 msgstr "My Applications"
 
@@ -30,3 +33,15 @@ msgstr "My Programs"
 
 msgid "command_delete"
 msgstr "Delete"
+
+msgid "label_name"
+msgstr "Name"
+
+msgid "label_title"
+msgstr "Title"
+
+msgid "label_device"
+msgstr "Device"
+
+msgid "label_duedate"
+msgstr "Due Date"

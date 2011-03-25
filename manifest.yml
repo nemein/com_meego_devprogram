@@ -4,8 +4,8 @@ process_injector: com_meego_devprogram_injector
 template_injector: com_meego_devprogram_injector
 
 requires:
-    midgardmvc_ui_forms:
-        - {type: github, user: bergie, repository: midgardmvc_ui_forms, branch: master}
+    midgardmvc_helper_forms:
+        - {type: github, user: midgardproject, repository: midgardmvc_helper_forms, branch: master}
 
 routes:
     index:
@@ -29,10 +29,17 @@ routes:
         template_aliases:
             content: cmd-list-programs
 
-    program_details:
-        path: /programs/{$program_name}
+    program_create:
+        path: /programs/create
         controller: com_meego_devprogram_controllers_programs
-        action: program_details
+        action: create
+        template_aliases:
+            content: cmd-edit-form
+
+    program_read:
+        path: /programs/{$program_name}/read
+        controller: com_meego_devprogram_controllers_programs
+        action: read
         template_aliases:
             content: cmd-program-details
 
@@ -42,6 +49,13 @@ routes:
         action: update
         template_aliases:
             content: cmd-edit-form
+
+    program_delete:
+        path: /programs/{$program_name}/delete
+        controller: com_meego_devprogram_controllers_programs
+        action: delete
+        template_aliases:
+            content: cmd-delete-form
 
     program_applications:
         path: /programs/{$program_name}/applications

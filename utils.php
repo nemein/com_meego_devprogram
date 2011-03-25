@@ -60,7 +60,7 @@ class com_meego_devprogram_utils
 
 
     /**
-     * Retrives the user guid of the user specifie by login name
+     * Retrieves the user guid of the user specifie by login name
      *
      * @param string login name (ie. user name) stored in midgard_user table
      * @return guid guid of the user
@@ -121,7 +121,128 @@ class com_meego_devprogram_utils
     }
 
     /**
-     * Retrives applications created by user having guid
+     * Retrieves programs created by user having a certain guid
+     *
+     * @param guid guid of the user
+     * @return array an array of com_meego_devprogram_program objects
+     */
+    private static function get_programs_by_creator_guid($guid = '')
+    {
+        $programs = array();
+
+        if (mgd_is_guid($guid))
+        {
+            $storage = new midgard_query_storage('com_meego_devprogram_program');
+
+            $q = new midgard_query_select($storage);
+
+            $qc = new midgard_query_constraint(
+                new midgard_query_property('metadata.creator'),
+                '=',
+                new midgard_query_value($guid)
+            );
+
+            $q->set_constraint($qc);
+            $q->execute();
+
+            $programs = $q->list_objects();
+        }
+
+        return $programs;
+    }
+
+    /**
+     * Retrieves all programs of a given user
+     *
+     * @param string login name (ie. user name) of the user
+     * @return array an array of com_meego_devprogram_program objects
+     */
+    public static function get_programs_of_user($login = '')
+    {
+        $programs = array();
+
+        if (! strlen($login))
+        {
+            return $programs;
+        }
+
+        // retrieve the user's guid based on the login name
+        $user_guid = self::get_guid_of_user($login);
+
+        return self::get_programs_by_creator_guid($user_guid);
+    }
+
+    /**
+     * Retrieves programs of the currently loged in user
+     *
+     * @return array an array of com_meego_devprogram_programs objects
+     *         null if user is not logged in
+     */
+    public static function get_programs_of_current_user()
+    {
+        // retrieve the user's guid based on the login name
+        $user = self::require_login();
+
+        if (! is_object($user))
+        {
+            return null;
+        }
+
+        return self::get_programs_by_creator_guid($user->guid);
+    }
+
+    /**
+     * Returns all open device programs
+     *
+     * @return array array of com_meego_devprogram_program objects
+     */
+    public static function get_open_programs()
+    {
+        $now = date("Y-m-d H:i:s");
+
+        $storage = new midgard_query_storage('com_meego_devprogram_program');
+
+        $q = new midgard_query_select($storage);
+
+        $qc = new midgard_query_constraint(
+            new midgard_query_property('duedate'),
+            '>',
+            new midgard_query_value($now)
+        );
+
+        $q->set_constraint($qc);
+        $q->execute();
+
+        return $q->list_objects();
+    }
+
+    /**
+     * Returns all closed device programs
+     *
+     * @return array array of com_meego_devprogram_program objects
+     */
+    public static function get_closed_programs()
+    {
+        $now = date("Y-m-d H:i:s");
+
+        $storage = new midgard_query_storage('com_meego_devprogram_program');
+
+        $q = new midgard_query_select($storage);
+
+        $qc = new midgard_query_constraint(
+            new midgard_query_property('duedate'),
+            '<',
+            new midgard_query_value($now)
+        );
+
+        $q->set_constraint($qc);
+        $q->execute();
+
+        return $q->list_objects();
+    }
+
+    /**
+     * Retrieves applications created by user having guid
      *
      * @param guid guid of the user
      * @return array an array of com_meego_devprogram_application objects
@@ -139,7 +260,7 @@ class com_meego_devprogram_utils
             $qc = new midgard_query_constraint_group('AND');
 
             $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('metadata_creator'),
+                new midgard_query_property('metadata.creator'),
                 '=',
                 new midgard_query_value($guid)
             ));
@@ -159,8 +280,8 @@ class com_meego_devprogram_utils
     }
 
     /**
-     * Retrives all open (ie. not accepted, nor declined) applications of the
-     * user who is currently logged in
+     * Retrieves all open (ie. not accepted, nor declined) applications of the
+     * given user
      *
      * @param string login name (ie. user name) of the user
      * @return array an array of com_meego_devprogram_application objects
@@ -181,7 +302,7 @@ class com_meego_devprogram_utils
     }
 
     /**
-     * Retrives applications of the currently loged in user
+     * Retrieves applications of the currently loged in user
      *
      * @return array an array of com_meego_devprogram_application objects
      *         null if user is not logged in
@@ -197,5 +318,20 @@ class com_meego_devprogram_utils
         }
 
         return self::get_applications_by_creator_guid($user->guid);
+    }
+
+    /**
+     * Retrieves all devices
+     *
+     * @return array array of com_meego_devprogram_device objects
+     */
+    public static function get_devices()
+    {
+        $storage = new midgard_query_storage('com_meego_devprogram_device');
+
+        $q = new midgard_query_select($storage);
+        $q->execute();
+
+        return $q->list_objects();
     }
 }
