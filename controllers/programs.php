@@ -29,7 +29,16 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function load_object(array $args)
     {
-        $this->object = com_meego_devprogram_progutils::get_program_by_name($args['program_name']);
+        $this->data['program'] = false;
+
+        // this should only match one program
+        $programs = com_meego_devprogram_progutils::get_programs(array('name' => $args['program_name']));
+
+        if (is_array($programs))
+        {
+            // but to make sure we only take the 1st member
+            $this->object = $programs[0];
+        }
 
         if (is_object($this->object))
         {
@@ -243,7 +252,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     {
         $this->data['type'] = 'open';
         $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
-        $this->data['programs'] = com_meego_devprogram_progutils::get_open_programs();
+        $this->data['programs'] = com_meego_devprogram_progutils::get_programs(array('status' => CMD_PROGRAM_OPEN));
     }
 
     /**
@@ -257,7 +266,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     {
         $this->data['type'] = 'closed';
         $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
-        $this->data['programs'] = com_meego_devprogram_progutils::get_closed_programs(true);
+        $this->data['programs'] = com_meego_devprogram_progutils::get_programs(array('status' => CMD_PROGRAM_CLOSED, 'deleted' => true));
     }
 
     /**
