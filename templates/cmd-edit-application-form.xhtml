@@ -1,0 +1,27 @@
+<div class="application" tal:condition="true: com_meego_devprogram/program" tal:define="program com_meego_devprogram/program">
+
+    <h2 class="title" i18n:translate="'title_application_form'">
+        <tal:block i18n:name="program">${program/title}</tal:block>
+    </h2>
+
+    <div class="status" tal:condition="true: com_meego_devprogram/myapps" tal:define="myapps com_meego_devprogram/myapps">
+        <span i18n:translate="'note_already_applied_for_program'"></span>
+        <span i18n:translate="'note_current_applications'"></span>
+        <ul>
+            <li tal:repeat="application myapps">
+                <a tal:attributes="href application/read_url">${application/title}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="form" tal:condition="true: com_meego_devprogram/form">
+
+        <div class="instruction">${program/instruction}</div>
+
+        <div class="edit">
+            <tal:block tal:content="structure com_meego_devprogram/form"></tal:block>
+        </div>
+
+    </div>
+
+</div>
