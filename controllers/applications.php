@@ -116,7 +116,9 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         $redirect = com_meego_devprogram_utils::get_url('my_application_create', $args);
         $user = com_meego_devprogram_utils::require_login($redirect);
 
-        $program = com_meego_devprogram_progutils::get_program_by_name($args['program_name']);
+        // @todo: sanity check
+        $programs = com_meego_devprogram_progutils::get_programs(array('name' => $args['program_name']));
+        $program = $programs[0];
 
         if (! is_object($program))
         {
