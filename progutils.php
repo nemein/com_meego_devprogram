@@ -20,8 +20,21 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         $program->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $program->name));
         $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $program->name));
         $program->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $program->name));
-        // reformat the duedate value
+
+        // reformat the duedate value so that templates and controllers don't have to bother
         $program->deadline = date('Y-m-d', strtotime($program->duedate));
+
+        // if current user is owner then we can add more goodies
+        $user = com_meego_devprogram_utils::get_current_user();
+
+        if (is_object($user))
+        {
+            if ($program->metadata->creator == $user->person)
+            {
+                $program->read_my_url = com_meego_devprogram_utils::get_url('my_program_read', array ('program_name' => $program->name));
+                $program->list_apps_url = com_meego_devprogram_utils::get_url('program_applications', array ('program_name' => $program->name));
+            }
+        }
 
         return $program;
     }
@@ -67,68 +80,52 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
 
         foreach ($filters as $filter => $value)
         {
-            // include deleted items
-            if (   $filter == 'deleted'
-                && $value)
+            switch ($filter)
             {
-                $q->include_deleted(true);
-            }
-
-            // check for creator filter
-            if ($filter == 'creator')
-            {
-                // check if the value is a real guid
-                if (mgd_is_guid($value))
-                {
+                case 'deleted':
+                    if ($value)
+                    {
+                        $q->include_deleted(true);
+                    }
+                    break;
+                case 'creator':
+                    // check if the value is a real guid
+                    if (mgd_is_guid($value))
+                    {
+                        $constraint = new midgard_query_constraint(
+                            new midgard_query_property('metadata.creator'),
+                            '=',
+                            new midgard_query_value($value)
+                        );
+                    }
+                    break;
+                case 'name':
+                case 'device':
                     $constraint = new midgard_query_constraint(
-                        new midgard_query_property('metadata.creator'),
+                        new midgard_query_property($filter),
                         '=',
                         new midgard_query_value($value)
                     );
-                }
+                    break;
+                case 'status':
+                    // current date and time
+                    $now = date("Y-m-d H:i:s");
+
+                    switch ($value) {
+                        case CMD_PROGRAM_CLOSED:
+                            $type = '<';
+                            break;
+                        case CMD_PROGRAM_OPEN:
+                        default:
+                            $type = '>';
+                    }
+                    $constraint = new midgard_query_constraint(
+                        new midgard_query_property('duedate'),
+                        $type,
+                        new midgard_query_value($now)
+                    );
+                    break;
             }
-
-            // check for name filter
-            if ($filter == 'name')
-            {
-                $constraint = new midgard_query_constraint(
-                    new midgard_query_property('name'),
-                    '=',
-                    new midgard_query_value($value)
-                );
-            }
-
-            // check for device filter
-            if ($filter == 'device')
-            {
-                $constraint = new midgard_query_constraint(
-                    new midgard_query_property('device'),
-                    '=',
-                    new midgard_query_value($value)
-                );
-            }
-
-            // check for status filter
-            if ($filter == 'status')
-            {
-                // current date and time
-                $now = date("Y-m-d H:i:s");
-
-                switch ($value) {
-                    case CMD_PROGRAM_CLOSED:
-                        $type = '<';
-                        break;
-                    case CMD_PROGRAM_OPEN:
-                    default:
-                        $type = '>';
-                }
-                $constraint = new midgard_query_constraint(
-                    new midgard_query_property('duedate'),
-                    $type,
-                    new midgard_query_value($now)
-                );
-            }
-
             // set the constraint
             (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
         }
