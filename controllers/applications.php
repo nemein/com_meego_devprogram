@@ -93,11 +93,10 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     public function get_my_applications_list(array $args)
     {
         // check if is logged in
-        if (! $this->mvc->authentication->is_user())
+        if (com_meego_devprogram_utils::get_current_user())
         {
-            return;
+            $this->data['my_applications'] = com_meego_devprogram_apputils::get_applications_of_current_user();
         }
-        $this->data['my_applications'] = com_meego_devprogram_apputils::get_applications_of_current_user();
     }
 
     /**
@@ -113,6 +112,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
             $this->mvc->head->relocate($url);
         }
 
+        // require login
         $redirect = com_meego_devprogram_utils::get_url('my_application_create', $args);
         $user = com_meego_devprogram_utils::require_login($redirect);
 
@@ -165,7 +165,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     public function get_update(array $args)
     {
         // set myapps to be able to show a warning
-        $this->data['myapps'] = false;//com_meego_devprogram_apputils::get_applications_of_current_user($program->id);
+        $this->data['myapps'] = false;
 
         parent::get_update($args);
     }
