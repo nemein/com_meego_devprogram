@@ -200,6 +200,12 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
 
         $this->load_object($args);
 
+        if (! is_object($this->object))
+        {
+            // hmm bail out
+            throw new midgardmvc_exception_notfound("Developer device program not found");
+        }
+
         if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
         {
             // owners of a program or admins should not apply for that program
@@ -314,7 +320,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_read_my(array $args)
     {
-        $this->data['can_delete'] = false;
+        $this->data['can_not_delete'] = true;
 
         $this->load_object($args);
 
@@ -323,7 +329,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             if (! count($this->object->applications))
             {
                 // program can only be deleted in no one has applied for it yet
-                $this->data['can_delete'] = true;
+                $this->data['can_not_delete'] = false;
             }
         }
         else
