@@ -224,7 +224,7 @@ msgid "note_already_applied_for_program"
 msgstr "You already applied for this program."
 
 msgid "note_current_applications"
-msgstr "Your ongoing applications are:"
+msgstr "Your ongoing application(s):"
 
 msgid "question_application_delete"
 msgstr "Are you sure you want to withdraw your application for program: ${program_name}?"
