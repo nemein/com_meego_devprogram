@@ -107,7 +107,7 @@ routes:
             content: cmd-my-programs
 
     my_program_read:
-        path: /myprograms/read/
+        path: /myprograms/read/{$program_name}
         controller: com_meego_devprogram_controllers_programs
         action: read_my
         template_aliases:
