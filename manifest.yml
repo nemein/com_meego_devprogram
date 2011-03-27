@@ -106,6 +106,13 @@ routes:
         template_aliases:
             content: cmd-my-programs
 
+    my_program_read:
+        path: /myprograms/read/
+        controller: com_meego_devprogram_controllers_programs
+        action: read_my
+        template_aliases:
+            content: cmd-my-program-details
+
     my_applications:
         path: /myapplications
         controller: com_meego_devprogram_controllers_applications

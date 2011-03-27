@@ -295,5 +295,33 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         // check if user owns the program
         // @todo
     }
+
+    /**
+     * Prepares and shows the my program details page (cmd-my-program-details)
+     *
+     * Access: only owners and admins can load this page
+     *
+     * @param array args (not used)
+     */
+    public function get_read_my(array $args)
+    {
+        $this->data['can_delete'] = false;
+
+        $this->load_object($args);
+
+        if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        {
+            if (! count($this->object->applications))
+            {
+                // program can only be deleted in no one has applied for it yet
+                $this->data['can_delete'] = true;
+            }
+        }
+        else
+        {
+            // redirect to standard read page
+            $this->relocate_to_read();
+        }
+    }
 }
 ?>
