@@ -1,3 +1,20 @@
 <h4 i18n:translate="'tip_device_description'"></h4>
 
-<mgd:include>cmd-edit-form</mgd:include>
+<div class="device" tal:condition="true: com_meego_devprogram/device" tal:define="device com_meego_devprogram/device">
+
+    <h2>${device/title}</h2>
+
+    <div class="model">${device/model}</div>
+
+    <div class="description">${device/description}</div>
+
+    <ul class="toolbar" tal:condition="com_meego_devprogram/can_manage">
+        <li>
+            <a class="action" tal:attributes="href device/update_url" i18n:translate="'command_device_update'"></a>
+        </li>
+        <li tal:condition="not: com_meego_devprogram/can_not_delete">
+            <a class="action" tal:attributes="href device/delete_url" i18n:translate="'command_device_delete'"></a>
+        </li>
+    </ul>
+
+</div>

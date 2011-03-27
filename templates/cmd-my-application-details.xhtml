@@ -1,3 +1,35 @@
-<div class="status">
-todo: my application details
+<div class="application" tal:condition="true: com_meego_devprogram/application" tal:define="application com_meego_devprogram/application; program com_meego_devprogram/program">
+
+    <h2 class="title">${application/title}</h2>
+
+    <div class="program" i18n:translate="'note_program_of_application'">
+        <a tal:attributes="href program/read_url" i18n:name="program">${program/title}</a>
+    </div>
+
+    <div class="summary">${application/summary}</div>
+
+    <div class="plan">${application/plan}</div>
+
+    <div class="project">
+        <span i18n:translate="'label_application_project'"></span>: ${application/project}
+    </div>
+
+    <div class="team">
+        <span i18n:translate="'label_application_team'"></span>: ${application/team}
+    </div>
+
+    <div class="url">
+        <span i18n:translate="'label_application_url'"></span>:
+        <a tal:condition="true: application/url" tal:attributes="href application/url">${application/url}</a>
+    </div>
+
+    <ul class="toolbar">
+        <li>
+            <a class="action" tal:attributes="href application/update_url" i18n:translate="'command_update_application'"></a>
+        </li>
+        <li>
+            <a class="action" tal:attributes="href application/delete_url" i18n:translate="'command_withdraw_application'"></a>
+        </li>
+    </ul>
+
 </div>

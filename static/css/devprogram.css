@@ -14,15 +14,16 @@ div.edit textarea,
 div.edit input {
 margin: 0.2em 0 0 0;
 display: block;
-min-width: 15em;
+min-width: 25em;
 }
 
-div.edit textarea.description {
+div.edit textarea {
 width: 40em;
 height: 15em;
 }
 
 div.edit input.form-submit {
+margin: 1em 0 0 0;
 min-width: 5em;
 }
 
@@ -42,9 +43,87 @@ border-bottom: 1px dashed lightgrey;
 padding: 0 0 2em 0;
 }
 
+div.menu-name-primary-links ul.menu li.leaf {
+margin: 0 0 6px 0;
+}
+
+ul.menu.my li.first {
+margin: 3px 0 6px 0;
+border-bottom: 1px solid grey;
+font-weight: bold;
+}
+
+ul.menu.my li.first a {
+border: 0;
+}
+
 div.actions {
 display: inline-block;
 position: relative;
 bottom: 1em;
 float: right;
 }
+
+div.program {
+margin: 1em 0 0 0;
+}
+
+div.program h2.title {
+border-bottom: 2px solid grey;
+}
+
+div.deadline {
+margin: 1em 0 1em 0;
+text-decoration: underline;
+}
+
+div.deadline span {
+font-weight: bold;
+}
+
+div.program div.summary {
+margin: 0 0 1em 0;
+font-style: italic;
+}
+
+ul.toolbar {
+margin: 1em 0 0 0;
+padding: 0;
+}
+
+ul.toolbar li {
+list-style: none;
+display: inline-block;
+margin: 0 2em 0 0;
+}
+
+div.application {
+margin: 1em 0 0 0;
+}
+
+div.instruction {
+margin: 1em 0 2em 0;
+text-align: justify;
+}
+
+div.edit input#multiple {
+display: inline;
+margin: 0 1em 0 0;
+}
+
+div.edit label[for=multiple] {
+display: inline;
+}
+
+div.application div.plan {
+border-bottom: 1px dashed lightgrey;
+margin: 1em 0 1em 0;
+}
+
+div.application div.program {
+margin: 0 0 1em 0;
+font-weight: bold;
+}
+
+
+

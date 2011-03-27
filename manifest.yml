@@ -23,21 +23,21 @@ routes:
             content: cmd-edit-form
 
     device_read:
-        path: /device/{$device_name}/read
+        path: /device/read/{$device_name}
         controller: com_meego_devprogram_controllers_devices
         action: read
         template_aliases:
             content: cmd-device-details
 
     device_update:
-        path: /device/{$device_name}/update
+        path: /device/update/{$device_name}
         controller: com_meego_devprogram_controllers_devices
         action: update
         template_aliases:
             content: cmd-edit-form
 
     device_delete:
-        path: /device/{$device_name}/delete
+        path: /device/delete/{$device_name}
         controller: com_meego_devprogram_controllers_devices
         action: delete
         template_aliases:
@@ -65,21 +65,21 @@ routes:
             content: cmd-edit-form
 
     program_read:
-        path: /programs/{$program_name}/read
+        path: /programs/read/{$program_name}
         controller: com_meego_devprogram_controllers_programs
         action: read
         template_aliases:
             content: cmd-program-details
 
     program_update:
-        path: /programs/{$program_name}/update
+        path: /programs/update/{$program_name}
         controller: com_meego_devprogram_controllers_programs
         action: update
         template_aliases:
             content: cmd-edit-form
 
     program_delete:
-        path: /programs/{$program_name}/delete
+        path: /programs/delete/{$program_name}
         controller: com_meego_devprogram_controllers_programs
         action: delete
         template_aliases:
@@ -91,13 +91,6 @@ routes:
         action: applications_for_program
         template_aliases:
             content: cmd-list-applications
-
-    program_application_details:
-        path: /programs/{$program_name}/applications/{$guid:application_guid}
-        controller: com_meego_devprogram_controllers_programs
-        action: application_details
-        template_aliases:
-            content: cmd-application-details
 
     my_devices:
         path: /mydevices
@@ -120,16 +113,38 @@ routes:
         template_aliases:
             content: cmd-my-applications
 
-    my_application_details:
-        path: /myapplications/{$guid:application_guid}
+    my_application_create:
+        path: /myapplications/create/{$program_name}
         controller: com_meego_devprogram_controllers_applications
-        action: my_application_details
+        action: create
+        template_aliases:
+            content: cmd-edit-application-form
+
+    my_application_read:
+        path: /myapplications/read/{$guid:application_guid}
+        controller: com_meego_devprogram_controllers_applications
+        action: read
         template_aliases:
             content: cmd-my-application-details
 
     my_application_update:
-        path: /myapplications/{$guid:application_guid}/update
+        path: /myapplications/update/{$guid:application_guid}
         controller: com_meego_devprogram_controllers_applications
         action: update
         template_aliases:
-            content: cmd-edit-form
+            content: cmd-edit-application-form
+
+    my_application_delete:
+        path: /myapplications/delete/{$guid:application_guid}
+        controller: com_meego_devprogram_controllers_applications
+        action: delete
+        template_aliases:
+            content: cmd-delete-form
+
+    application_judge:
+        path: /application/judge/{$guid:application_guid}
+        controller: com_meego_devprogram_controllers_applications
+        action: judge
+        template_aliases:
+            content: cmd-edit-application-form
+

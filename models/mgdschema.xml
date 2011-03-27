@@ -9,8 +9,8 @@
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>
-        <property name="name" type="string">
-            <description>Name of the device</description>
+        <property name="name" type="string" unique="yes">
+            <description>Unique name of the device</description>
             <readonly>true</readonly>
         </property>
         <property name="title" type="string">
@@ -43,17 +43,21 @@
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>
-        <property name="name" type="string">
-            <description>Name of the developer device program. Must be unique.</description>
-            <required>true</required>
+        <property name="name" type="string" unique="yes">
+            <description>Uniqueu name of the developer device program</description>
+            <readonly>true</readonly>
         </property>
         <property name="title" type="string">
             <description>Title of the program (pretty name)</description>
             <property>dcterms:title</property>
             <required>true</required>
         </property>
-        <property name="summary" type="string">
+        <property name="summary" type="longtext">
             <description>Short description of the developer device program</description>
+            <required>true</required>
+        </property>
+        <property name="instruction" type="longtext">
+            <description>Instruction for applicants. This text is shown to the people when they fill in the application form.</description>
             <required>true</required>
         </property>
         <property name="description" type="longtext">
@@ -72,8 +76,8 @@
             <description>Amount of devices offered within the program</description>
             <required>true</required>
         </property>
-        <property name="discount" type="float">
-            <description>Discount percentage (e.g. relative to the retail price)</description>
+        <property name="discount" type="integer">
+            <description>Discount percentage (relative to the retail price)</description>
             <required>true</required>
         </property>
         <property name="nature" type="string">
@@ -82,6 +86,9 @@
         <property name="url" type="string">
             <description>URL pointing to a page with more details about the program (e.g. a vendor's page)</description>
             <contenttype>url</contenttype>
+        </property>
+        <property name="multiple" type="boolean">
+            <description>If true then multiple entries are allowed from the same person.</description>
         </property>
     </type>
 
@@ -93,11 +100,16 @@
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>
+        <property name="title" type="string">
+            <description>Title of the application</description>
+            <property>dcterms:title</property>
+            <required>true</required>
+        </property>
         <property name="program" type="unsigned integer" link="com_meego_devprogram_program:id" parentfield="program">
             <description>Developer device program this application is submitted for</description>
             <required>true</required>
         </property>
-        <property name="summary" type="string">
+        <property name="summary" type="longtext">
             <description>Short description of the idea represented by the application</description>
             <required>true</required>
         </property>

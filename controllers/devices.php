@@ -72,6 +72,9 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
     {
         $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false, 'label_device_', 'tip_device_');
         $this->form->set_submit('form-submit', $this->mvc->i18n->get('command_save'));
+
+        # remove the name field, we will genarate it from title
+        $this->form->__unset('name');
     }
 
     /**
@@ -101,14 +104,10 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
     {
         $this->load_object($args);
 
-        $this->load_form();
+        $this->data['device'] = $this->object;
 
-        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object->guid))
-        {
-            $this->form->set_readonly(true);
-        }
-
-        $this->data['form'] =& $this->form;
+        $this->data['can_manage'] = com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object);
+        $this->data['can_not_delete'] = com_meego_devprogram_progutils::any_open_program_uses_device($this->object->id);
     }
 
     /**
@@ -117,7 +116,34 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
      */
     public function post_create(array $args)
     {
-        parent::post_delete($args);
+        $this->get_create($args);
+        try
+        {
+            $transaction = new midgard_transaction();
+            $transaction->begin();
+            $this->process_form();
+
+            // generate a unique name
+            $this->object->name = com_meego_devprogram_utils::generate_unique_name($this->object);
+
+            if (! $this->object->name)
+            {
+                throw new midgardmvc_exception('Could not generate a valid, unique name to a new object');
+            }
+            $res = $this->object->create();
+            $transaction->commit();
+
+            // TODO: add uimessage of $e->getMessage();
+            $this->relocate_to_read();
+        }
+        catch (midgardmvc_helper_forms_exception_validation $e)
+        {
+            // TODO: UImessage
+        }
+        catch (midgardmvc_exception $e)
+        {
+            // TODO: UImessage
+        }
     }
 
     /**
@@ -131,7 +157,7 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
 
         $this->data['can_not_delete'] = com_meego_devprogram_progutils::any_open_program_uses_device($this->object->id);
 
-        $this->data['delete_question'] = $this->mvc->i18n->get('question_delete', null, array('device_name' => $this->object->name));
+        $this->data['delete_question'] = $this->mvc->i18n->get('question_device_delete', null, array('device_name' => $this->object->name));
     }
 
     /**

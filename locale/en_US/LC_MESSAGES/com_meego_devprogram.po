@@ -70,8 +70,11 @@ msgstr "Summary"
 msgid "tip_program_summary"
 msgstr "Short summary of the program that is shown in the programs' list"
 
-msgid "tip_application_summary"
-msgstr "Short summary of the application that is shown for vendors"
+msgid "label_program_multiple"
+msgstr "Allow multiple entries from same person"
+
+msgid "tip_program_multiple"
+msgstr "If set to true then the same person can submit multiple applications for the program"
 
 msgid "label_device_title"
 msgstr "Title"
@@ -86,13 +89,19 @@ msgid "label_program_description"
 msgstr "Description"
 
 msgid "tip_device_description"
-msgstr "Details about the device"
+msgstr "Details of the device"
 
 msgid "tip_program_description"
-msgstr "Details about the developer device program"
+msgstr "Optional details of the developer device program"
 
 msgid "label_program_device"
 msgstr "Device"
+
+msgid "label_program_instruction"
+msgstr "Instructions for applicants"
+
+msgid "tip_program_instruction"
+msgstr "These instructions are required and will be shown to people when filling in the application form."
 
 msgid "label_program_duedate"
 msgstr "Due date of applications"
@@ -118,19 +127,13 @@ msgstr "URL for more info"
 msgid "label_program_url"
 msgstr "URL"
 
-msgid "label_application_url"
-msgstr "URL"
-
 msgid "tip_device_url"
 msgstr "Link to a page showing more details on the device"
 
 msgid "tip_program_url"
 msgstr "Link to a page showing more details on the developer device program"
 
-msgid "tip_application_url"
-msgstr "Link to a page showing more details on the application"
-
-msgid "question_delete"
+msgid "question_device_delete"
 msgstr "Are you sure you want to delete the device called: ${device_name}?"
 
 msgid "feedback_can_not_delete_device"
@@ -162,3 +165,74 @@ msgstr "The nature of the program"
 
 msgid "tip_program_nature"
 msgstr "The nature of the program"
+
+msgid "command_apply_for_program"
+msgstr "Apply for the program"
+
+msgid "command_update_application"
+msgstr "Update application"
+
+msgid "command_withdraw_application"
+msgstr "Withdraw application"
+
+msgid "note_application_deadline"
+msgstr "Deadline: ${deadline}"
+
+msgid "title_application_form"
+msgstr "Application Form for ${program}"
+
+msgid "label_application_title"
+msgstr "Title"
+
+msgid "tip_application_title"
+msgstr "A short name of the application. This text will appear in various lists."
+
+msgid "label_application_summary"
+msgstr "Summary"
+
+msgid "tip_application_summary"
+msgstr "Short summary of the application that is shown for vendors"
+
+msgid "label_application_plan"
+msgstr "Plan with the device"
+
+msgid "tip_application_plan"
+msgstr "Describe in details your plan with the device. This is the key to succesful application."
+
+msgid "label_application_project"
+msgstr "Project name"
+
+msgid "tip_application_project"
+msgstr "Name of the project (if any) where the device will be used."
+
+msgid "label_application_team"
+msgstr "Team name"
+
+msgid "tip_application_team"
+msgstr "Team (if any) who will use the device."
+
+msgid "label_application_url"
+msgstr "URL"
+
+msgid "tip_application_url"
+msgstr "Link to a page showing more details to support the application."
+
+msgid "note_program_of_application"
+msgstr "Device Program: ${program}"
+
+msgid "note_already_applied_for_program"
+msgstr "You already applied for this program."
+
+msgid "note_current_applications"
+msgstr "Your ongoing applications are:"
+
+msgid "question_application_delete"
+msgstr "Are you sure you want to withdraw your application for program: ${program_name}?"
+
+msgid "command_device_update"
+msgstr "Update Device"
+
+msgid "command_device_delete"
+msgstr "Delete Device"
+
+

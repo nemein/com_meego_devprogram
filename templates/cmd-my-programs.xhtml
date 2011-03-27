@@ -5,15 +5,15 @@
 
         <div class="content">
             <div class="menu-block-1 menu-name-primary-links menu-level-2">
-                <ul class="menu">
+                <ul class="menu my">
                     <tal:block tal:condition="user">
-                    <li class="leaf last" tal:condition="create_program_url">
+                    <li class="leaf first" tal:condition="create_program_url">
                         <a tal:attributes="href create_program_url" i18n:translate="'title_create_program'"></a>
                     </li>
                     </tal:block>
 
-                    <li class="leaf first"  tal:condition="true: com_meego_devprogram/my_programs" tal:repeat="program com_meego_devprogram/my_programs">
-                        <a tal:attributes="href program/read_url">${program/title}</a>
+                    <li class="leaf"  tal:condition="true: com_meego_devprogram/my_programs" tal:repeat="program com_meego_devprogram/my_programs">
+                        <a tal:attributes="href program/update_url">${program/title}</a>
                     </li>
                 </ul>
             </div>

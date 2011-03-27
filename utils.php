@@ -12,15 +12,22 @@ class com_meego_devprogram_utils
      * If not logged then redirect to the login page otherwise return user
      * object
      *
+     * @param string optional redirect page after succesful login
      * @return object midgard_user object
      */
-    public static function require_login()
+    public static function require_login($redirect = '')
     {
         $mvc = midgardmvc_core::get_instance();
 
         if (! $mvc->authentication->is_user())
         {
             $login_url = '/mgd:login';
+
+            if (strlen($redirect))
+            {
+                $login_url .= '?redirect=' . $redirect;
+            }
+
             $mvc->head->relocate($login_url);
         }
 
@@ -67,10 +74,10 @@ class com_meego_devprogram_utils
      * Checks if the currently logged in user is a creator of the object
      * or an administrator
      *
-     * @param guid guid of any object
+     * @param object any object that is part of the schemas
      * @return boolean
      */
-    public function is_current_user_creator_or_admin($guid = '')
+    public function is_current_user_creator_or_admin($object = null)
     {
         $retval = false;
 
@@ -82,10 +89,11 @@ class com_meego_devprogram_utils
             {
                 $retval = true;
             }
-            elseif (mgd_is_guid($guid))
+            elseif (is_object($object))
             {
-                $object = midgard_object::get_by_guid($guid);
-                if ($object->metadata->creator == $guid)
+                $user = $mvc->authentication->get_user();
+
+                if ($object->metadata->creator == $user->person)
                 {
                     $retval = true;
                 }
@@ -93,5 +101,54 @@ class com_meego_devprogram_utils
         }
 
         return $retval;
+    }
+
+    /**
+     * A simple way to generate a unique name for an object.
+     *
+     * It determines the class of the object, looks up similar objects in db
+     * and generates a new name based on the title.
+     *
+     * Alters the generated name as long as it does not become unique by
+     * adding a date to the end of it.
+     *
+     * @param object any object that is defined in the schema
+     * @return string a new name
+     *
+     */
+    public function generate_unique_name($newobject)
+    {
+        $name = null;
+
+        if (is_object($newobject))
+        {
+            $names = array();
+            $class = get_class($newobject);
+            $qb = new midgard_query_builder($class);
+            $objects = $qb->execute();
+
+            // fill in an array with current names
+            foreach ($objects as $object)
+            {
+                $names[] = $object->name;
+            }
+            $unique = false;
+
+            $name = strtolower($newobject->title);
+            $name = str_replace(' ', '-', $name);
+
+            do {
+                if (array_search($name, $names) === false)
+                {
+                    $unique = true;
+                }
+                else
+                {
+                    $name .= '-' . date("Ymd");
+                }
+            } while (! $unique);
+        }
+
+        return $name;
     }
 }

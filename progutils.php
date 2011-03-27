@@ -39,6 +39,28 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
     }
 
     /**
+     * Load a program by its guid or id
+     *
+     * @param string guid or id of the program
+     * @return object an extended com_meego_devprogram_program object
+     *                added some useful urls as new properties
+     */
+    public function get_program_by_id($id = '')
+    {
+        $program = null;
+
+        if (strlen($id))
+        {
+            $program = new com_meego_devprogram_program($id);
+            $program->read_url = com_meego_devprogram_utils::get_url('program_read', array('program_name' => $program->name));
+            $program->update_url = com_meego_devprogram_utils::get_url('program_update', array('program_name' => $program->name));
+            $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array('program_name' => $program->name));
+        }
+
+        return $program;
+    }
+
+    /**
      * Loads a program by its name
      *
      * Names are unique in the program table
@@ -70,6 +92,13 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             if (count($programs))
             {
                 $program = new com_meego_devprogram_program($programs[0]->guid);
+                // set some urls, they can come handy
+                $program->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $program->name));
+                $program->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $program->name));
+                $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $program->name));
+                $program->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $program->name));
+                // reformat the duedate value
+                $program->deadline = date('Y-m-d', strtotime($programs[0]->duedate));
             }
         }
 
@@ -120,6 +149,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
                     $object->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $object->name));
                     $object->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $object->name));
                     $object->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $object->name));
+                    $object->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $object->name));
 
                     $programs[] = $object;
                 }
@@ -204,6 +234,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
                 $object->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $object->name));
                 $object->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $object->name));
                 $object->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $object->name));
+                $object->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $object->name));
 
                 $programs[] = $object;
             }

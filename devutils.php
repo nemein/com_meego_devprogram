@@ -58,7 +58,8 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
      * Retrieves a device by its name
      *
      * @param string name
-     * @return object com_meego_debprogram device object
+     * @return object com_meego_debprogram device object extended with
+     *                some useful urls
      */
     public function get_device_by_name($name = '')
     {
@@ -84,6 +85,9 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
             if (count($devices))
             {
                 $device = new com_meego_devprogram_device($devices[0]->guid);
+                $device->read_url = com_meego_devprogram_utils::get_url('device_read', array ('device_name' => $device->name));
+                $device->update_url = com_meego_devprogram_utils::get_url('device_update', array ('device_name' => $device->name));
+                $device->delete_url = com_meego_devprogram_utils::get_url('device_delete', array ('device_name' => $device->name));
             }
         }
 

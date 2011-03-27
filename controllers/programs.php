@@ -33,6 +33,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
 
         if (is_object($this->object))
         {
+            $this->data['program'] = $this->object;
             midgardmvc_core::get_instance()->head->set_title($this->object->title);
         }
     }
@@ -67,39 +68,29 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     public function load_form()
     {
         $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false, 'label_program_', 'tip_program_');
+
+        # we have to alter the submit button and three fields on the form
         $this->form->set_submit('form-submit', $this->mvc->i18n->get('command_save'));
-/*
 
-        $this->form = midgardmvc_helper_forms::create('com_meego_devprogram_program');
+        # remove the name field, we will genarate it from title
+        $this->form->__unset('name');
 
-        $name = $this->form->add_field('name', 'text', true);
-        $name->set_value($this->object->name);
-        $widget = $name->set_widget('text');
-        $widget->set_label($this->mvc->i18n->get('label_name'));
+        # change the default widget of duedate field
+        $object_end = $this->object->duedate;
+        if ($object_end->getTimestamp() <= 0)
+        {
+            $new_end = new DateTime('last day of next month');
+            $object_end->setTimestamp($new_end->getTimestamp());
+        }
 
-        // @todo: add name tip
+        $duedate = new midgardmvc_helper_forms_field_text('duedate', true);
+        $duedate->set_value($object_end);
+        $widget = $duedate->set_widget('date');
+        $widget->set_label($this->mvc->i18n->get('label_program_duedate'));
 
-        $title = $this->form->add_field('title', 'text', true);
-        $title->set_value($this->object->title);
-        $widget = $title->set_widget('text');
-        $widget->set_label($this->mvc->i18n->get('label_title'));
+        $this->form->__set('duedate', $duedate);
 
-        // @todo: add title tip
-
-        $summary = $this->form->add_field('description', 'text', true);
-        $summary->set_value($this->object->description);
-        $widget = $summary->set_widget('textarea');
-        $widget->set_label($this->mvc->i18n->get('label_summary'));
-
-        // @todo: add summary tip
-
-        $description = $this->form->add_field('description', 'text', true);
-        $description->set_value($this->object->description);
-        $widget = $description->set_widget('html');
-        $widget->set_label($this->mvc->i18n->get('label_description'));
-
-        // @todo: add description tip
-
+        # change the default widget of device field
         $devices = com_meego_devprogram_devutils::get_devices();
         foreach ($devices as $device)
         {
@@ -109,34 +100,18 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
                 'value' => $device->id
             );
         }
-        $device = $this->form->add_field('device', 'integer');
+
+        $device = new midgardmvc_helper_forms_field_integer('device', true);
         $device->set_value($this->object->device);
         $widget = $device->set_widget('selectoption');
-        $widget->set_label($this->mvc->i18n->get('label_device'));
-        $widget->set_options($device_options);
+        $widget->set_label($this->mvc->i18n->get('label_program_device'));
 
-        // @todo: add device tip
-
-        $duedate = $this->form->add_field('duedate', 'datetime', true);
-        $object_end = $this->object->duedate;
-        if ($object_end->getTimestamp() <= 0)
+        if (is_array($device_options))
         {
-            $new_end = new DateTime('last day of next month');
-            $object_end->setTimestamp($new_end->getTimestamp());
+            $widget->set_options($device_options);
         }
-        $duedate->set_value($object_end);
-        $widget = $duedate->set_widget('date');
-        $widget->set_label($this->mvc->i18n->get('label_duedate'));
 
-        // @todo: add due date tip
-
-        $url = $this->form->add_field('url', 'url', true);
-        $url->set_value($this->object->url);
-        $widget = $url->set_widget('text');
-        $widget->set_label($this->mvc->i18n->get('label_url'));
-
-        // @todo: add url tip
-*/
+        $this->form->__set('device', $device);
     }
 
     /**
@@ -163,6 +138,45 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     }
 
     /**
+     * Processes the newly submitted prgram
+     * Generates name from title
+     * Checks if name is unique
+     *
+     * @param array args
+     */
+    public function post_create(array $args)
+    {
+        $this->get_create($args);
+        try
+        {
+            $transaction = new midgard_transaction();
+            $transaction->begin();
+            $this->process_form();
+
+            // generate a unique name
+            $this->object->name = com_meego_devprogram_utils::generate_unique_name($this->object);
+
+            if (! $this->object->name)
+            {
+                throw new midgardmvc_exception('Could not generate a valid, unique name to a new object');
+            }
+            $res = $this->object->create();
+            $transaction->commit();
+
+            // TODO: add uimessage of $e->getMessage();
+            $this->relocate_to_read();
+        }
+        catch (midgardmvc_helper_forms_exception_validation $e)
+        {
+            // TODO: UImessage
+        }
+        catch (midgardmvc_exception $e)
+        {
+            // TODO: UImessage
+        }
+    }
+
+    /**
      * Prepares and shows the program details page (cmd-program-details)
      *
      * Access: anyone can read the program details
@@ -172,18 +186,50 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_read(array $args)
     {
+        $this->data['myapps'] = null;
+        $this->data['can_apply'] = true;
+
         $this->load_object($args);
 
-        $this->load_form();
-
-        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object->guid))
+        if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
         {
-            $this->form->set_readonly(true);
+            // owners of a program or admins should not apply for that program
+            $this->data['can_apply'] = false;
+        }
+        elseif ($this->mvc->authentication->is_user())
+        {
+            // check if the user has applied for the program and
+            // display a warning if yes
+            // in case of multiple applications we only refer to the 1st
+            $this->data['myapps'] = com_meego_devprogram_apputils::get_applications_of_current_user($this->object->id);
+
+            if (   count($this->data['myapps'])
+                && ! $this->object->multiple)
+            {
+                // if applied then we disable further applications
+                // unless the program accepts multiple entries from the same person
+                $this->data['can_apply'] = false;
+            }
+        }
+    }
+
+    /**
+     * Prepares loading the update page
+     * Checks if the user is logged in and is the owner of the program
+     *
+     * @param array args
+     */
+    public function get_update(array $args)
+    {
+        $this->load_object($args);
+
+        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        {
+            // nice try; could throw an exception, but we will just redirect
+            $this->relocate_to_read();
         }
 
-        $this->form->set_action(self::get_url_update());
-
-        $this->data['form'] =& $this->form;
+        parent::get_update($args);
     }
 
     /**

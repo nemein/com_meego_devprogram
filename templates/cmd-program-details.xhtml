@@ -1,3 +1,29 @@
-<h4 i18n:translate="'tip_program_description'"></h4>
+<div class="program" tal:condition="true: com_meego_devprogram/program" tal:define="program com_meego_devprogram/program">
 
-<mgd:include>cmd-edit-form</mgd:include>
+    <h2 class="title">${program/title}</h2>
+
+    <div class="status" tal:condition="true: com_meego_devprogram/myapps" tal:define="myapps com_meego_devprogram/myapps">
+        <span i18n:translate="'note_already_applied_for_program'"></span>
+        <span i18n:translate="'note_current_applications'"></span>
+        <ul>
+            <li tal:repeat="application myapps">
+                <a tal:attributes="href application/read_url">${application/title}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="deadline" i18n:translate="'note_application_deadline'">
+        <span i18n:name="deadline">${program/deadline}</span>
+    </div>
+
+    <div class="summary">${program/summary}</div>
+
+    <div class="description">${program/description}</div>
+
+    <ul class="toolbar">
+        <li>
+            <a class="action" tal:condition="com_meego_devprogram/can_apply" tal:attributes="href program/apply_url" i18n:translate="'command_apply_for_program'"></a>
+        </li>
+    </ul>
+
+</div>
