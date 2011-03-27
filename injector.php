@@ -12,6 +12,9 @@ define('CMD_APPLICATION_CANCELLED', 2);
 define('CMD_APPLICATION_APPROVED', 8);
 define('CMD_APPLICATION_DECLINED', 9);
 
+define('CMD_PROGRAM_OPEN', 1);
+define('CMD_PROGRAM_CLOSED', 0);
+
 class com_meego_devprogram_injector
 {
     var $component = 'com_meego_devprogram';
