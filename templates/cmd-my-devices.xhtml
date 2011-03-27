@@ -10,7 +10,7 @@
                         <a tal:attributes="href create_device_url" i18n:translate="'title_create_device'"></a>
                     </li>
                     <li class="leaf" tal:condition="true: com_meego_devprogram/my_devices" tal:repeat="device com_meego_devprogram/my_devices">
-                        <a tal:attributes="href device/update_url">${device/title}</a>
+                        <a tal:attributes="href device/read_url">${device/title}</a>
                     </li>
                 </ul>
             </div>
