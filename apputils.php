@@ -49,14 +49,12 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
     /**
      * Retrieves applications using various filters
      *
-     * @param guid guid of the creator user
-     * @param integer optional parameter for a program id
-     * @param integer optional parameter for filtering applications by status
+     * @param array filters array
      *
      * @return array an array of com_meego_devprogram_application objects
      *               extended with some handy urls
      */
-    private static function get_applications($creator_guid = null, $program_id = null, $application_status = null)
+    private static function get_applications(array $filters)
     {
         $applications = array();
 
@@ -64,41 +62,45 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
         $q = new midgard_query_select($storage);
         $qc = new midgard_query_constraint_group('AND');
 
-        if (mgd_is_guid($creator_guid))
+        foreach ($filters as $filter => $value)
         {
-            // check if creator guid is valid
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('metadata.creator'),
-                '=',
-                new midgard_query_value($creator_guid)
-            ));
+            switch ($filter) {
+                case 'creator':
+                    // check if creator guid is valid
+                    if (mgd_is_guid($value))
+                    {
+                        $constraint = new midgard_query_constraint(
+                            new midgard_query_property('metadata.creator'),
+                            '=',
+                            new midgard_query_value($value)
+                        );
+                    }
+                    break;
+                case 'program':
+                case 'status':
+                    $constraint = new midgard_query_constraint(
+                        new midgard_query_property($filter),
+                        '=',
+                        new midgard_query_value($value)
+                    );
+                    break;
+            }
+
+            // set the constraint
+            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
         }
-        if ($program_id)
+
+        if (! array_key_exists('status', $filters))
         {
-            // filter for this program
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('program'),
-                '=',
-                new midgard_query_value($program_id)
-            ));
-        }
-        if ($application_status)
-        {
-            // filter based on status
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('status'),
-                '=',
-                new midgard_query_value($application_status)
-            ));
-        }
-        else
-        {
-            // otherwise include only open applications
-            $qc->add_constraint(new midgard_query_constraint(
+            // if status was not set explicitly then include all but cancelled applications
+            $constraint = new midgard_query_constraint(
                 new midgard_query_property('status'),
                 '<',
                 new midgard_query_value(CMD_APPLICATION_CANCELLED)
-            ));
+            );
+
+            // set the constraint
+            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
         }
 
         $q->set_constraint($qc);
@@ -134,7 +136,9 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
         // retrieve the user's guid based on the login name
         $user_guid = self::get_guid_of_user($login);
 
-        return self::get_applications($user->person, $program_id);
+        $filters = array('creator' => $user->person, 'program' => $program_id);
+
+        return self::get_applications($filters);
     }
 
     /**
@@ -150,7 +154,9 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
         if ($user)
         {
-            return self::get_applications($user->person, $program_id);
+            $filters = array('creator' => $user->person, 'program' => $program_id);
+
+            return self::get_applications($filters);
         }
     }
 }
