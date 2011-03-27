@@ -8,34 +8,22 @@
 class com_meego_devprogram_progutils extends com_meego_devprogram_utils
 {
     /**
-     * Checks if the user is the owner of the program (or an admin of the site)
-     * If user is not logged in then it will redirect to login page
+     * Adds some handy properties to program object
      *
-     * @param string name of the program
-     * @return boolean true if user is owner, false otherwise
+     * @param object com_meego_devprogram_program object
+     * @return object extended com_meego_devprogram_program object
      */
-    public static function is_owner_of_program($name = '')
+    private static function extend_program($program = null)
     {
-        $retval = false;
+        // set some urls, they can come handy
+        $program->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $program->name));
+        $program->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $program->name));
+        $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $program->name));
+        $program->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $program->name));
+        // reformat the duedate value
+        $program->deadline = date('Y-m-d', strtotime($program->duedate));
 
-        $user = self::require_login();
-
-        if (is_object($user))
-        {
-            $program = self::get_program_by_name($name);
-            if ($program)
-            {
-                // do the check
-                if (   $user->is_admin()
-                    || $program->metadata_creator == $user->person_guid)
-                {
-                    // for owners and admins return true
-                    $retval = true;
-                }
-            }
-        }
-
-        return $retval;
+        return $program;
     }
 
     /**
@@ -51,112 +39,147 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
 
         if (strlen($id))
         {
-            $program = new com_meego_devprogram_program($id);
-            $program->read_url = com_meego_devprogram_utils::get_url('program_read', array('program_name' => $program->name));
-            $program->update_url = com_meego_devprogram_utils::get_url('program_update', array('program_name' => $program->name));
-            $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array('program_name' => $program->name));
+            $program = self::extend_program(new com_meego_devprogram_program($id));
         }
 
         return $program;
     }
 
     /**
-     * Loads a program by its name
+     * Retrieves programs using various filters
      *
-     * Names are unique in the program table
-     *
-     * @param string name of the program
+     * @param array filters, possible members: name, creator, status
+     *              if multiple members used then we do a logical AND with them
      * @return object com_meego_devprogram_program object
      */
-    public static function get_program_by_name($name = '')
+    public static function get_programs(array $filters)
     {
-        $program = null;
+        $programs = null;
 
-        if (strlen($name))
+        $storage = new midgard_query_storage('com_meego_devprogram_program');
+
+        $q = new midgard_query_select($storage);
+
+        if (count($filters) > 1)
         {
-            $storage = new midgard_query_storage('com_meego_devprogram_program');
-
-            $q = new midgard_query_select($storage);
-
-            $qc = new midgard_query_constraint(
-                new midgard_query_property('name'),
-                '=',
-                new midgard_query_value($name)
-            );
-
-            $q->set_constraint($qc);
-            $q->execute();
-
-            $programs = $q->list_objects();
-
-            if (count($programs))
-            {
-                $program = new com_meego_devprogram_program($programs[0]->guid);
-                // set some urls, they can come handy
-                $program->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $program->name));
-                $program->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $program->name));
-                $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $program->name));
-                $program->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $program->name));
-                // reformat the duedate value
-                $program->deadline = date('Y-m-d', strtotime($programs[0]->duedate));
-            }
+            $qc = new midgard_query_constraint_group('AND');
         }
 
-        return $program;
-    }
-
-    /**
-     * Retrieves programs created by user having a certain guid
-     *
-     * @param guid guid of the user
-     * @return array an array of com_meego_devprogram_program objects
-     */
-    private static function get_open_programs_by_creator_guid($guid = '')
-    {
-        $programs = array();
-
-        if (mgd_is_guid($guid))
+        foreach ($filters as $filter => $value)
         {
-            $now = date("Y-m-d H:i:s");
-
-            $storage = new midgard_query_storage('com_meego_devprogram_program');
-
-            $q = new midgard_query_select($storage);
-
-            $qc = new midgard_query_constraint_group('AND');
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('metadata.creator'),
-                '=',
-                new midgard_query_value($guid)
-            ));
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('duedate'),
-                '>',
-                new midgard_query_value($now)
-            ));
-
-            $q->set_constraint($qc);
-            $q->execute();
-
-            $objects = $q->list_objects();
-
-            if (count($objects))
+            // include deleted items
+            if (   $filter == 'deleted'
+                && $value)
             {
-                $mvc = midgardmvc_core::get_instance();
+                $q->include_deleted(true);
+            }
 
-                foreach ($objects as $object)
+            // check for creator filter
+            if ($filter == 'creator')
+            {
+                // check if the value is a real guid
+                if (mgd_is_guid($value))
                 {
-                    $object->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $object->name));
-                    $object->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $object->name));
-                    $object->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $object->name));
-                    $object->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $object->name));
-
-                    $programs[] = $object;
+                    $constraint = new midgard_query_constraint(
+                        new midgard_query_property('metadata.creator'),
+                        '=',
+                        new midgard_query_value($value)
+                    );
                 }
+            }
+
+            // check for name filter
+            if ($filter == 'name')
+            {
+                $constraint = new midgard_query_constraint(
+                    new midgard_query_property('name'),
+                    '=',
+                    new midgard_query_value($value)
+                );
+            }
+
+            // check for device filter
+            if ($filter == 'device')
+            {
+                $constraint = new midgard_query_constraint(
+                    new midgard_query_property('device'),
+                    '=',
+                    new midgard_query_value($value)
+                );
+            }
+
+            // check for status filter
+            if ($filter == 'status')
+            {
+                // current date and time
+                $now = date("Y-m-d H:i:s");
+
+                switch ($value) {
+                    case CMD_PROGRAM_CLOSED:
+                        $type = '<';
+                        break;
+                    case CMD_PROGRAM_OPEN:
+                    default:
+                        $type = '>';
+                }
+                $constraint = new midgard_query_constraint(
+                    new midgard_query_property('duedate'),
+                    $type,
+                    new midgard_query_value($now)
+                );
+            }
+
+            // set the constraint
+            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
+        }
+
+        $q->set_constraint($qc);
+        $q->execute();
+
+        $objects = $q->list_objects();
+
+        if (count($objects))
+        {
+            foreach ($objects as $object)
+            {
+                $programs[] = self::extend_program($object);
             }
         }
 
         return $programs;
+    }
+
+    /**
+     * Checks if the user is the owner of the program (or an admin of the site)
+     * If user is not logged in then it will redirect to login page
+     *
+     * @param string name of the program
+     * @return boolean true if user is owner, false otherwise
+     */
+    public static function is_owner_of_program($name = '')
+    {
+        $retval = false;
+
+        $user = self::require_login();
+
+        if (is_object($user))
+        {
+            $programs = self::get_programs(array('name' => $name));
+
+            if (   is_array($programs)
+                && isset($programs[0]))
+            {
+                // do the creator check
+                if (   $user->is_admin()
+                    || $program->metadata_creator == $user->person_guid)
+                {
+                    // for owners and admins return true
+                    $retval = true;
+                }
+            }
+        }
+
+        return $retval;
     }
 
     /**
@@ -175,9 +198,11 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         }
 
         // retrieve the user's guid based on the login name
-        $user_guid = self::get_guid_of_user($login);
+        $guid = self::get_guid_of_user($login);
 
-        return self::get_open_programs_by_creator_guid($user_guid);
+        $filters = array('status' => CMD_PROGRAM_OPEN, 'creator' => $guid);
+
+        return self::get_programs($filters);
     }
 
     /**
@@ -196,78 +221,9 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             return null;
         }
 
-        return self::get_open_programs_by_creator_guid($user->person);
-    }
+        $filters = array('status' => CMD_PROGRAM_OPEN, 'creator' => $user->person);
 
-    /**
-     * Returns all open device programs
-     *
-     * @return array array of com_meego_devprogram_program objects
-     */
-    public static function get_open_programs()
-    {
-        $programs = false;
-
-        $now = date("Y-m-d H:i:s");
-
-        $storage = new midgard_query_storage('com_meego_devprogram_program');
-
-        $q = new midgard_query_select($storage);
-
-        $qc = new midgard_query_constraint(
-            new midgard_query_property('duedate'),
-            '>',
-            new midgard_query_value($now)
-        );
-
-        $q->set_constraint($qc);
-        $q->execute();
-
-        $objects = $q->list_objects();
-
-        if (count($objects))
-        {
-            $mvc = midgardmvc_core::get_instance();
-
-            foreach ($objects as $object)
-            {
-                $object->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $object->name));
-                $object->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $object->name));
-                $object->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $object->name));
-                $object->apply_url = com_meego_devprogram_utils::get_url('my_application_create', array ('program_name' => $object->name));
-
-                $programs[] = $object;
-            }
-        }
-
-        return $programs;
-    }
-
-    /**
-     * Returns all closed device programs
-     *
-     * @param boolean if true then search will include delete records
-     * @return array array of com_meego_devprogram_program objects
-     */
-    public static function get_closed_programs($deleted = false)
-    {
-        $now = date("Y-m-d H:i:s");
-
-        $storage = new midgard_query_storage('com_meego_devprogram_program');
-
-        $q = new midgard_query_select($storage);
-
-        $qc = new midgard_query_constraint(
-            new midgard_query_property('duedate'),
-            '<',
-            new midgard_query_value($now)
-        );
-
-        $q->set_constraint($qc);
-        $q->include_deleted($deleted);
-        $q->execute();
-
-        return $q->list_objects();
+        return self::get_programs($filters);
     }
 
     /**
@@ -282,31 +238,15 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
 
         if ($id)
         {
-            $now = date("Y-m-d H:i:s");
+            $filters = array('status' => CMD_PROGRAM_OPEN, 'device' => $id);
+            $programs = self::get_programs($filters);
 
-            $storage = new midgard_query_storage('com_meego_devprogram_program');
-
-            $q = new midgard_query_select($storage);
-
-            $qc = new midgard_query_constraint_group('AND');
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('duedate'),
-                '>',
-                new midgard_query_value($now)
-            ));
-            $qc->add_constraint(new midgard_query_constraint(
-                new midgard_query_property('device'),
-                '=',
-                new midgard_query_value($id)
-            ));
-
-            $q->set_constraint($qc);
-            $q->execute();
-
-            if ($q->get_results_count())
+            if (count($programs))
             {
                 $retval = true;
             }
+
+            unset($filters, $programs);
         }
 
         return $retval;
@@ -318,7 +258,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      */
     public function delete_expired_programs()
     {
-        $programs = self::get_closed_programs();
+        $programs = get_programs(array('status' => CMD_PROGRAM_CLOSED));
 
         foreach($programs as $program)
         {
