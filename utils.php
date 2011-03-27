@@ -8,6 +8,17 @@
 class com_meego_devprogram_utils
 {
     /**
+     * Returns the curretnly logged in user's object
+     *
+     * @return object midgard_user object of the current user
+     */
+    public static function get_current_user()
+    {
+        $mvc = midgardmvc_core::get_instance();
+        return $mvc->authentication->get_user();
+    }
+
+    /**
      * Requires a user to be logged in
      * If not logged then redirect to the login page otherwise return user
      * object
