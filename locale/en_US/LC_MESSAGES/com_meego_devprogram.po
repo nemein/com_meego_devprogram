@@ -235,4 +235,12 @@ msgstr "Update Device"
 msgid "command_device_delete"
 msgstr "Delete Device"
 
+msgid "command_program_update"
+msgstr "Update Program"
+
+msgid "command_program_list_applications"
+msgstr "List Applications"
+
+msgid "command_program_delete"
+msgstr "Delete Program"
 
