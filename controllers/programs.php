@@ -206,7 +206,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             throw new midgardmvc_exception_notfound("Developer device program not found");
         }
 
-        if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        if (com_meego_devprogram_utils::is_current_user_creator($this->object))
         {
             // owners of a program or admins should not apply for that program
             $this->data['can_apply'] = false;
@@ -326,7 +326,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
 
         if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
         {
-            if (! count($this->object->applications))
+            if (! $this->object->number_of_applications)
             {
                 // program can only be deleted in no one has applied for it yet
                 $this->data['can_not_delete'] = false;
