@@ -9,6 +9,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
 {
     var $mvc = null;
     var $request = null;
+    var $component = 'com_meego_devprogram';
 
     /**
      * Contructor
@@ -96,7 +97,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     public function load_judge_form()
     {
         $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false, 'label_application_', 'tip_application_');
-        $this->form->set_submit('form-submit', $this->mvc->i18n->get('command_application_approve'));
+        $this->form->set_submit('form-submit', $this->mvc->i18n->get('command_submit'), true);
 
         # remove the program field
         $this->form->__unset('program');
@@ -113,9 +114,33 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         $field->set_value($this->data['program']->id);
         $field->set_widget('hidden');
 
-        // @todo:
-        // add request more info button
-        // add deby button
+        # checkbox for the decision
+        $field = $this->form->add_field('status', 'integer', false);
+        $widget = $field->set_widget('radiobuttons');
+        $widget->add_label($this->mvc->i18n->get('label_application_decision'));
+
+        $options = array
+        (
+            array
+            (
+                'description' => $this->mvc->i18n->get('label_application_decision_approve'),
+                'value' => CMD_APPLICATION_APPROVED
+            ),
+            array
+            (
+                'description' => $this->mvc->i18n->get('label_application_decision_moreinfo'),
+                'value' => CMD_APPLICATION_MOREINFO
+            ),
+            array
+            (
+                'description' => $this->mvc->i18n->get('label_application_decision_deny'),
+                'value' => CMD_APPLICATION_DENIED
+            )
+        );
+        $widget->set_options($options);
+
+        // pimp the date input fields
+        $this->mvc->head->add_jsfile(MIDGARDMVC_STATIC_URL . '/' . $this->component . '/js/decision.js');
     }
 
     /**
