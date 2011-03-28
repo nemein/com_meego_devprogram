@@ -65,6 +65,8 @@ class com_meego_devprogram_utils
             $guid = $users[0]->person;
         }
 
+        unset($qb);
+
         return $guid;
     }
 
@@ -83,6 +85,36 @@ class com_meego_devprogram_utils
 
     /**
      * Checks if the currently logged in user is a creator of the object
+     *
+     * @param object any object that is part of the schemas
+     * @return boolean
+     */
+    public function is_current_user_creator($object = null)
+    {
+        $retval = false;
+
+        $mvc = midgardmvc_core::get_instance();
+
+        if ($mvc->authentication->is_user())
+        {
+            if (is_object($object))
+            {
+                $user = $mvc->authentication->get_user();
+
+                if ($object->metadata->creator == $user->person)
+                {
+                    $retval = true;
+                }
+            }
+        }
+
+        unset($mvc);
+
+        return $retval;
+    }
+
+    /**
+     * Checks if the currently logged in user is a creator of the object
      * or an administrator
      *
      * @param object any object that is part of the schemas
@@ -96,20 +128,14 @@ class com_meego_devprogram_utils
 
         if ($mvc->authentication->is_user())
         {
-            if ($mvc->authentication->get_user()->is_admin())
+            if (   $mvc->authentication->get_user()->is_admin()
+                || self::is_current_user_creator())
             {
                 $retval = true;
             }
-            elseif (is_object($object))
-            {
-                $user = $mvc->authentication->get_user();
-
-                if ($object->metadata->creator == $user->person)
-                {
-                    $retval = true;
-                }
-            }
         }
+
+        unset($mvc);
 
         return $retval;
     }
