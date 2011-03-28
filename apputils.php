@@ -60,7 +60,13 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
         $storage = new midgard_query_storage('com_meego_devprogram_application');
         $q = new midgard_query_select($storage);
-        $qc = new midgard_query_constraint_group('AND');
+
+        if (   count($filters) > 1
+            || (count($filters) == 1
+               && ! array_key_exists('status', $filters)))
+        {
+            $qc = new midgard_query_constraint_group('AND');
+        }
 
         foreach ($filters as $filter => $value)
         {
@@ -87,7 +93,14 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
             }
 
             // set the constraint
-            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
+            if (is_a($qc, 'midgard_query_constraint_group'))
+            {
+                $qc->add_constraint($constraint);
+            }
+            else
+            {
+                $qc = $constraint;
+            }
         }
 
         if (! array_key_exists('status', $filters))
@@ -100,7 +113,18 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
             );
 
             // set the constraint
-            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
+            if (count($filters) >= 1)
+            {
+                if (! is_a($qc, 'midgard_query_constraint_group'))
+                {
+                    $qc = new midgard_query_constraint_group('AND');
+                }
+                $qc->add_constraint($constraint);
+            }
+            else
+            {
+                $qc = $constraint;
+            }
         }
 
         $q->set_constraint($qc);
@@ -117,8 +141,7 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
     }
 
     /**
-     * Retrieves all open (ie. not accepted, nor declined) applications of the
-     * given user
+     * Retrieves all but cancelled applications of the given user
      *
      * @param string login name (ie. user name) of the user
      * @param integer optional parameter to specify a concrete program
@@ -142,7 +165,7 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
     }
 
     /**
-     * Retrieves all open applications of the currently loged in user
+     * Retrieves all but cancelled applications of the currently loged in user
      *
      * @param integer optional parameter to specify a concrete program
      * @return array an array of com_meego_devprogram_application objects
@@ -158,5 +181,17 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
             return self::get_applications($filters);
         }
+    }
+
+    /**
+     * Retrieves all but cancelled applications by program
+     *
+     * @param integer id of the program
+     */
+    public static function get_applications_by_program($program_id = '')
+    {
+        $filters = array('program' => $program_id);
+
+        return self::get_applications($filters);
     }
 }
