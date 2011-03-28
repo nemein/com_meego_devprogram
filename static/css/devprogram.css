@@ -1,3 +1,7 @@
+.right {
+float: right;
+}
+
 div.info,
 form.delete,
 div.edit {
