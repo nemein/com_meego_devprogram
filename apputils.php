@@ -8,19 +8,28 @@
 class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 {
     /**
-     * Adds some handy url properties to an application object
+     * Extends an application object with some handy properties
      *
      * @param object com_meego_devprogram_application object
      * @return object extended com_meego_devprogram_application object
      */
-    private static function application_with_urls($application = null)
+    private static function extend_application($application = null)
     {
         if ($application)
         {
+            // some urls
             $application->read_url = com_meego_devprogram_utils::get_url('my_application_read', array('application_guid' => $application->guid));
             $application->update_url = com_meego_devprogram_utils::get_url('my_application_update', array('application_guid' => $application->guid));
             $application->delete_url = com_meego_devprogram_utils::get_url('my_application_delete', array('application_guid' => $application->guid));
             $application->judge_url = com_meego_devprogram_utils::get_url('application_judge', array('application_guid' => $application->guid));
+
+            // submitter's username
+            $user = com_meego_devprogram_utils::get_user_by_person_guid($application->metadata->creator);
+
+            if (is_object($user))
+            {
+                $application->submitter = $user->login;
+            }
 
             return $application;
         }
@@ -40,7 +49,7 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
         if (mgd_is_guid($guid))
         {
             $application = new com_meego_devprogram_application($guid);
-            $application = self::application_with_urls($application);
+            $application = self::extend_application($application);
         }
 
         return $application;
@@ -84,11 +93,14 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
                     break;
                 case 'program':
                 case 'status':
-                    $constraint = new midgard_query_constraint(
-                        new midgard_query_property($filter),
-                        '=',
-                        new midgard_query_value($value)
-                    );
+                    if ($value)
+                    {
+                        $constraint = new midgard_query_constraint(
+                            new midgard_query_property($filter),
+                            '=',
+                            new midgard_query_value($value)
+                        );
+                    }
                     break;
             }
 
@@ -134,7 +146,7 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
         foreach ($objects as $object)
         {
-            $applications[] = self::application_with_urls($object);
+            $applications[] = self::extend_application($object);
         }
 
         return $applications;
@@ -188,7 +200,7 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
      *
      * @param integer id of the program
      */
-    public static function get_applications_by_program($program_id = '')
+    public static function get_applications_by_program($program_id = null)
     {
         $filters = array('program' => $program_id);
 

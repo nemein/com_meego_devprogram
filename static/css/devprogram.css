@@ -36,15 +36,17 @@ margin: 1em;
 border-top: 1px dashed lightgrey;
 }
 
-ul.programs {
+ul.programs,
+ul.applications {
 margin: 0 0 0 1em;
 padding: 0;
 }
 
-ul.programs li.program {
+ul.programs li.program,
+ul.applications li.application {
 list-style: none;
 border-bottom: 1px dashed lightgrey;
-padding: 0 0 2em 0;
+padding: 0 0 3em 0;
 }
 
 div.menu-name-primary-links ul.menu li.leaf {
@@ -63,8 +65,6 @@ border: 0;
 
 div.actions {
 display: inline-block;
-position: relative;
-bottom: 1em;
 float: right;
 }
 
@@ -119,6 +119,10 @@ div.edit label[for=multiple] {
 display: inline;
 }
 
+div.edit h2.title {
+margin: 1em 0 1em 0;
+}
+
 div.application div.plan {
 border-bottom: 1px dashed lightgrey;
 margin: 1em 0 1em 0;
@@ -129,5 +133,18 @@ margin: 0 0 1em 0;
 font-weight: bold;
 }
 
+div.brief h3 {
+text-decoration: underline;
+}
 
+div.brief div.submitted {
+margin: 0 0 1em 0;
+}
 
+div.brief .submitter {
+font-weight: bold;
+}
+
+h2.title.orange {
+background-color: #ff6e34;
+}

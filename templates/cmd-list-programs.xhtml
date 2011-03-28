@@ -6,6 +6,9 @@
 </div>
 
 <div class="list" tal:condition="true: com_meego_devprogram/programs">
+
+    <h2 i18n:translate="'title_list_of_open_programs'"></h2>
+
     <ul class="programs">
         <li class="program" tal:repeat="program com_meego_devprogram/programs">
             <div class="brief">
@@ -17,4 +20,5 @@
             </div>
         </li>
     </ul>
+
 </div>

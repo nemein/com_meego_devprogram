@@ -71,6 +71,34 @@ class com_meego_devprogram_utils
     }
 
     /**
+     * Retrieves the user specified by guid
+     *
+     * @param guid user's person guid
+     * @return object midgard_user object
+     */
+    public static function get_user_by_person_guid($guid = '')
+    {
+        $user = null;
+
+        if (mgd_is_guid($guid))
+        {
+            $qb = new midgard_query_builder('midgard_user');
+            $qb->add_constraint('person', '=', $guid);
+
+            $users = $qb->execute();
+
+            if (count($users))
+            {
+                $user = $users[0];
+            }
+
+            unset($qb);
+        }
+
+        return $user;
+    }
+
+    /**
      * Returns urls based on routes
      *
      * @param string route
@@ -97,6 +125,7 @@ class com_meego_devprogram_utils
 
         if ($mvc->authentication->is_user())
         {
+
             if (is_object($object))
             {
                 $user = $mvc->authentication->get_user();
@@ -129,7 +158,7 @@ class com_meego_devprogram_utils
         if ($mvc->authentication->is_user())
         {
             if (   $mvc->authentication->get_user()->is_admin()
-                || self::is_current_user_creator())
+                || self::is_current_user_creator($object))
             {
                 $retval = true;
             }

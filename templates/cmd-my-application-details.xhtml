@@ -23,7 +23,7 @@
         <a tal:condition="true: application/url" tal:attributes="href application/url">${application/url}</a>
     </div>
 
-    <ul class="toolbar">
+    <ul class="toolbar" tal:condition="true: application/can_manage">
         <li>
             <a class="action" tal:attributes="href application/update_url" i18n:translate="'command_update_application'"></a>
         </li>

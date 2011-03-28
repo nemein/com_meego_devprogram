@@ -22,6 +22,9 @@ msgstr "Menu"
 msgid "title_list_open_programs"
 msgstr "List Open Programs"
 
+msgid "title_list_of_open_programs"
+msgstr "List of open programs"
+
 msgid "title_create_device"
 msgstr "Create Device"
 
@@ -246,3 +249,38 @@ msgstr "Delete Program"
 
 msgid "note_number_of_applications"
 msgstr "Applications: ${number}"
+
+msgid "feedback_no_applications"
+msgstr "The program has no applications yet."
+
+msgid "title_applications_for_program"
+msgstr "List of applications for ${program}"
+
+msgid "title_application_submitter"
+msgstr "Submitted by: ${username}"
+
+msgid "command_application_approve"
+msgstr "Approve"
+
+msgid "command_application_request_more_info"
+msgstr "Request More Information"
+
+msgid "command_application_deny"
+msgstr "Deny"
+
+msgid "title_application_decision"
+msgstr "Application Decision"
+
+msgid "label_application_devicesn"
+msgstr "Device Serial Number"
+
+msgid "tip_application_devicesn"
+msgstr "The serial number of the device if the application is approved"
+
+msgid "label_application_remarks"
+msgstr "Remarks"
+
+msgid "tip_application_remarks"
+msgstr "Feedback from the vendor to the applicant"
+
+

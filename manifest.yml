@@ -153,5 +153,5 @@ routes:
         controller: com_meego_devprogram_controllers_applications
         action: judge
         template_aliases:
-            content: cmd-edit-application-form
+            content: cmd-edit-application-judge-form
 

@@ -29,6 +29,13 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     {
         $this->object = com_meego_devprogram_apputils::get_application_by_guid($args['application_guid']);
 
+        // by default we set this to true so that the toolbar is visible
+        // we remove the toolbar on the judge form
+        $this->object->can_manage = true;
+
+        // set the application data
+        $this->data['application'] = $this->object;
+
         // also get the program the application was submitted for
         $this->data['program'] = com_meego_devprogram_progutils::get_program_by_id($this->object->program);
     }
@@ -81,6 +88,34 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         $field = $this->form->add_field('program', 'integer', false);
         $field->set_value($this->data['program']->id);
         $field->set_widget('hidden');
+    }
+
+    /**
+     * Loads the judging form
+     */
+    public function load_judge_form()
+    {
+        $this->form = midgardmvc_helper_forms_mgdschema::create($this->object, false, 'label_application_', 'tip_application_');
+        $this->form->set_submit('form-submit', $this->mvc->i18n->get('command_application_approve'));
+
+        # remove the program field
+        $this->form->__unset('program');
+        # remove fields that are not needed by judges
+        $this->form->__unset('title');
+        $this->form->__unset('summary');
+        $this->form->__unset('plan');
+        $this->form->__unset('project');
+        $this->form->__unset('team');
+        $this->form->__unset('url');
+        $this->form->__unset('status');
+
+        $field = $this->form->add_field('program', 'integer', false);
+        $field->set_value($this->data['program']->id);
+        $field->set_widget('hidden');
+
+        // @todo:
+        // add request more info button
+        // add deby button
     }
 
     /**
@@ -144,7 +179,8 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     /**
      * Prepares and shows the application details page (cmd-my-application-details)
      *
-     * Access: only owners of the application can read
+     * Access: only creators of the application can read
+     *         or program owners / admins
      *
      * @param array args
      */
@@ -152,9 +188,17 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     {
         parent::get_read($args);
 
-        unset($this->data['object']);
+        if ( ! (   com_meego_devprogram_utils::is_current_user_creator_or_admin($this->data['application'])
+                || com_meego_devprogram_utils::is_current_user_creator_or_admin($this->data['program'])))
+        {
+            // not creator of application
+            // not owner of the program the app was created for
+            // not an administrator
+            // nice try, but sorry, get back to index
+            $this->mvc->head->relocate(com_meego_devprogram_utils::get_url('index', array()));
+        }
 
-        $this->data['application'] = $this->object;
+        unset($this->data['object']);
     }
 
     /**
@@ -195,6 +239,26 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
      */
     public function get_judge(array $args)
     {
+        $this->load_object($args);
+
+        if (   ! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->data['program'])
+            && ! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        {
+            // not creator of application
+            // not owner of the program the app was created for
+            // not an administrator
+            // nice try, but sorry, get back to index
+            $this->mvc->head->relocate(com_meego_devprogram_utils::get_url('index', array()));
+        }
+
+        // we remove the toolbar on the judge form
+        $this->data['application']->can_manage = false;
+
+        $this->load_judge_form();
+
+        $this->data['form'] = $this->form;
+
+        unset($this->data['object']);
     }
 }
 ?>

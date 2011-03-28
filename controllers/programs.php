@@ -284,13 +284,16 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_applications_for_program(array $args)
     {
-        // check if is logged in
-        if (! $this->mvc->authentication->is_user())
+        $this->load_object($args);
+
+        // check if user owns the program or he / she is an admin
+        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
         {
-            return;
+            // nice try, redirect to standard read page
+            $this->relocate_to_read();
         }
-        // check if user owns the program
-        // @todo
+        $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
+        $this->data['applications'] = com_meego_devprogram_apputils::get_applications_by_program($this->object->id);
     }
 
     /**
