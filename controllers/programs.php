@@ -244,7 +244,11 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             $this->relocate_to_read();
         }
 
-        parent::get_update($args);
+        $this->data['object'] =& $this->object;
+        $this->mvc->authorization->require_do('midgard:update', $this->object);
+
+        $this->load_form();
+        $this->data['form'] =& $this->form;
     }
 
     /**
@@ -294,24 +298,6 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         }
         $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
         $this->data['applications'] = com_meego_devprogram_apputils::get_applications_by_program($this->object->id);
-    }
-
-    /**
-     * Prepares and shows an application details page (cmd-application-details)
-     *
-     * Access: only owners of the program can see details of the application
-     *
-     * @param array args (not used)
-     */
-    public function get_application_details(array $args)
-    {
-        // check if is logged in
-        if (! $this->mvc->authentication->is_user())
-        {
-            return;
-        }
-        // check if user owns the program
-        // @todo
     }
 
     /**
