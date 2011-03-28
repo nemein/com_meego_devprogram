@@ -33,6 +33,8 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             {
                 $program->read_my_url = com_meego_devprogram_utils::get_url('my_program_read', array ('program_name' => $program->name));
                 $program->list_apps_url = com_meego_devprogram_utils::get_url('program_applications', array ('program_name' => $program->name));
+                // set the number of apps (all but the cancelled ones) under this program
+                $program->number_of_applications = count(com_meego_devprogram_apputils::get_applications_by_program($program->id));
             }
         }
 
