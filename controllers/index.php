@@ -27,6 +27,8 @@ class com_meego_devprogram_controllers_index
      */
     public function get_index(array $args)
     {
+        $this->data['latest'] = com_meego_devprogram_progutils::get_latest_program();
+        $this->data['closing'] = com_meego_devprogram_progutils::get_closing_programs();
     }
 }
 

@@ -127,12 +127,27 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
                         new midgard_query_value($now)
                     );
                     break;
+                case 'daysleft':
+                    // duedate < now + value
+                    $now = new DateTime();
+                    $limit = $now->add(new DateInterval('P' . $value . 'D'));
+
+                    $constraint = new midgard_query_constraint(
+                        new midgard_query_property('duedate'),
+                        '<',
+                        new midgard_query_value($limit->format('Y-m-d'))
+                    );
+
+                    break;
             }
             // set the constraint
             (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
         }
 
         $q->set_constraint($qc);
+
+        $q->add_order(new midgard_query_property('metadata.created'), SORT_DESC);
+
         $q->execute();
 
         $objects = $q->list_objects();
@@ -263,5 +278,38 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         {
             $program->delete();
         }
+    }
+
+    /**
+     * Retrieves the latest program
+     *
+     * @return object extended com_meego_devprogram_program object
+     */
+    public function get_latest_program()
+    {
+        $programs = self::get_programs(array('status' => CMD_PROGRAM_OPEN));
+        $program = array_shift($programs);
+
+        return $program;
+    }
+
+    /**
+     * Retrieves the programs which are soon to be closed
+     * The days left for closing can be configured
+     *
+     * @return object extended com_meego_devprogram_program object
+     */
+    public function get_closing_programs($daysleft = 0)
+    {
+        $mvc = midgardmvc_core::get_instance();
+
+        if (! $daysleft)
+        {
+            $daysleft = $mvc->configuration->daysleft;
+        }
+
+        $programs = self::get_programs(array('daysleft' => $daysleft));
+
+        return $programs;
     }
 }

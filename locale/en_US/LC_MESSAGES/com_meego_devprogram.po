@@ -313,3 +313,10 @@ msgstr "cancelled"
 msgid "label_application_has_update"
 msgstr "Application updated"
 
+msgid "title_latest_program"
+msgstr "Latest Program"
+
+msgid "title_closing_programs"
+msgstr "Closing Soon"
+
+

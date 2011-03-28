@@ -1,5 +1,30 @@
 <h1 i18n:translate="'title_welcome'">Welcome to MeeGo DevProgram!</h1>
 
+<div class="promo">
+
+    <div class="latest" tal:condition="true: com_meego_devprogram/latest" tal:define="program com_meego_devprogram/latest">
+        <h2 class="title orange" i18n:translate="'title_latest_program'"></h2>
+
+        <h3 class="title"><a tal:attributes="href program/read_url">${program/title}</a></h3>
+
+        <div class="summary">${program/summary}</div>
+    </div>
+
+    <div class="closing" tal:condition="true: com_meego_devprogram/closing">
+
+        <h2 class="title green" i18n:translate="'title_closing_programs'"></h2>
+
+        <ul class="closing">
+            <li tal:repeat="program com_meego_devprogram/closing">
+                <a tal:attributes="href program/read_url">${program/title}</a>
+                <span class="deadline right">${program/deadline}</span>
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+
 <div class="splash"></div>
 
 <div class="warning intro" i18n:translate="'introduction'"></div>

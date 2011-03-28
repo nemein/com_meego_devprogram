@@ -1,2 +1,6 @@
 # display breadcrumb or not
 enable_breadcrumb: false
+
+# closing programs are shown on the index page
+# this value specifies the days left which is used in the search
+daysleft: 14
