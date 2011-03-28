@@ -13,8 +13,11 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      * @param object com_meego_devprogram_program object
      * @return object extended com_meego_devprogram_program object
      */
-    private static function extend_program($program = null)
+    private static function extend_program($object = null)
     {
+        // q->toggle_readonly(false) does not work so we need a new object
+        $program = new com_meego_devprogram_program($object->guid);
+
         // set some urls, they can come handy
         $program->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $program->name));
         $program->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $program->name));
@@ -149,6 +152,9 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         $q->add_order(new midgard_query_property('metadata.created'), SORT_DESC);
 
         $q->execute();
+
+        // does not seem to work
+        // @bug: $q->toggle_read_only(false);
 
         $objects = $q->list_objects();
 
