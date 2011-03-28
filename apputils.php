@@ -13,8 +13,10 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
      * @param object com_meego_devprogram_application object
      * @return object extended com_meego_devprogram_application object
      */
-    private static function extend_application($application = null)
+    private static function extend_application($object = null)
     {
+        $application = new com_meego_devprogram_application($object->guid);
+
         if ($application)
         {
             // some urls
@@ -183,6 +185,9 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
         $q->set_constraint($qc);
         $q->execute();
+
+        // does not seem to work
+        // @bug: $q->toggle_read_only(false);
 
         $objects = $q->list_objects();
 
