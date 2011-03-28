@@ -295,3 +295,21 @@ msgstr "Approve Application"
 msgid "label_application_decision_deny"
 msgstr "Deny Application"
 
+msgid "label_application_state_pending"
+msgstr "pending"
+
+msgid "label_application_state_approved"
+msgstr "approved"
+
+msgid "label_application_state_moreinfo"
+msgstr "requested more information"
+
+msgid "label_application_state_denied"
+msgstr "denied"
+
+msgid "label_application_state_cancelled"
+msgstr "cancelled"
+
+msgid "label_application_has_update"
+msgstr "Application updated"
+

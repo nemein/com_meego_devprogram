@@ -31,6 +31,48 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
                 $application->submitter = $user->login;
             }
 
+            // human readable decision state of the application
+            $mvc = midgardmvc_core::get_instance();
+
+            switch ($application->status)
+            {
+                case CMD_APPLICATION_PENDING:
+                    $state = $mvc->i18n->get('label_application_state_pending');
+                    $css = 'pending';
+                    break;
+                case CMD_APPLICATION_APPROVED:
+                    $state = $mvc->i18n->get('label_application_state_approved');
+                    $css = 'approved';
+                    break;
+                case CMD_APPLICATION_MOREINFO:
+                    $state = $mvc->i18n->get('label_application_state_moreinfo');
+                    $css = 'moreinfo';
+                    break;
+                case CMD_APPLICATION_CANCELLED:
+                    $state = $mvc->i18n->get('label_application_state_cancelled');
+                    $css = 'cancelled';
+                    break;
+                case CMD_APPLICATION_DENIED:
+                    $state = $mvc->i18n->get('label_application_state_denied');
+                    $css = 'denied';
+                    break;
+                default:
+                    $state = $mvc->i18n->get('label_application_state_pending');
+                    $css = 'pending';
+            }
+
+            $application->decision = ucfirst($state);
+            $application->state_css = $css;
+
+            // now check if the applicant has actually updated since the last decision of the program owner
+            $application->has_update = false;
+
+            if (   $application->status == 1
+                && $application->metadata->revisor == $application->metadata->creator)
+            {
+                $application->has_update = true;
+            }
+
             return $application;
         }
     }

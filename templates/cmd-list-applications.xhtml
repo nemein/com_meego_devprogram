@@ -12,7 +12,15 @@
     <ul class="applications">
         <li class="application" tal:repeat="application com_meego_devprogram/applications">
             <div class="brief">
-                    <h3>${application/title}</h3>
+                    <h2 class="title">
+                        ${application/title}
+                        <span tal:attributes="class php: 'right ' . application.state_css">${application/decision}</span>
+                    </h2>
+
+                    <div class="state">
+                        <span class="green" tal:condition="true: application/has_update" i18n:translate="'label_application_has_update'"></span>
+                    </div>
+
                     <div class="submitted" i18n:translate="'title_application_submitter'">
                         <span class="submitter" i18n:name="username">${application/submitter}</span>
                     </div>

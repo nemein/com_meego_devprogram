@@ -285,5 +285,32 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
 
         unset($this->data['object']);
     }
+
+    /**
+     * Handles posts from application judges
+     *
+     * @param array args
+     */
+    public function post_judge(array $args)
+    {
+        $this->get_judge($args);
+
+        try
+        {
+            $transaction = new midgard_transaction();
+            $transaction->begin();
+            $this->process_form();
+            $this->object->update();
+            $transaction->commit();
+
+            // Redirect to application lists of that program
+            $this->mvc->head->relocate($this->data['program']->list_apps_url);
+        }
+        catch (midgardmvc_helper_forms_exception_validation $e)
+        {
+            // TODO: UImessage
+        }
+
+    }
 }
 ?>

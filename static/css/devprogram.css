@@ -1,11 +1,19 @@
+.right {
+float: right;
+}
+
+.orange {
+background-color: #ff6e34;
+}
+
+.green {
+background-color: #53b77c;
+}
+
 input[disabled=disabled],
 input[disabled=disabled]:hover {
 background-color: lightgrey;
 border-color: grey;
-}
-
-.right {
-float: right;
 }
 
 div.info,
@@ -151,10 +159,6 @@ div.brief .submitter {
 font-weight: bold;
 }
 
-h2.title.orange {
-background-color: #ff6e34;
-}
-
 ul.status {
 padding: 0;
 margin: 0;
@@ -165,3 +169,39 @@ list-style: none;
 display: inline-block;
 margin: 0 3em 0 0;
 }
+
+div.state {
+margin: 1em 0 1em 0;
+}
+
+div.state span {
+padding: 5px;
+}
+
+.title span {
+padding: 10px;
+}
+
+span.pending {
+background-color: #ff6e34;
+}
+
+span.approved {
+background-color: #53b77c;
+}
+
+span.moreinfo {
+background-color: #50c3e6;
+}
+
+span.cancelled {
+background-color: #e3038d;
+}
+
+span.denied {
+background-color: red;
+}
+
+
+
+
