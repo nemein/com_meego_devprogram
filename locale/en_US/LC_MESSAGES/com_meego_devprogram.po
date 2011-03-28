@@ -283,4 +283,15 @@ msgstr "Remarks"
 msgid "tip_application_remarks"
 msgstr "Feedback from the vendor to the applicant"
 
+msgid "label_application_decision"
+msgstr "Decision"
+
+msgid "label_application_decision_moreinfo"
+msgstr "Request More Information"
+
+msgid "label_application_decision_approve"
+msgstr "Approve Application"
+
+msgid "label_application_decision_deny"
+msgstr "Deny Application"
 
