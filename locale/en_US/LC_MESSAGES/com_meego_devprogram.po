@@ -244,3 +244,5 @@ msgstr "List Applications"
 msgid "command_program_delete"
 msgstr "Delete Program"
 
+msgid "note_number_of_applications"
+msgstr "Applications: ${number}"
