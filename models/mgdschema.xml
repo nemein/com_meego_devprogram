@@ -11,6 +11,12 @@
         </property>
         <property name="name" type="string" unique="yes">
             <description>Name of the provider</description>
+            <readonly>true</readonly>
+        </property>
+        <property name="title" type="string">
+            <description>Pretty name of the provider</description>
+            <property>dcterms:title</property>
+            <required>true</required>
         </property>
         <property name="url" type="string">
             <description>URL pointing to a site of the provider</description>
