@@ -1,3 +1,16 @@
+# map of available device platforms and their pretty names used in the UI
+platforms:
+    netbook: Netbook
+    entrydesktop: Entry-level Desktop
+    nettop: Nettop
+    tablet: Tablet Computer
+    handset: Mobile Computer / Handset
+    ivi: In-Vehicle Infotainment (IVI) System
+    smarttv:  Smart TV / Connected TV
+    iptv: IP TV Box
+    devdevice: Development Device
+    other: Other
+
 # display breadcrumb or not
 enable_breadcrumb: false
 
