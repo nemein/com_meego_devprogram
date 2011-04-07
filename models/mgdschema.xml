@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Schema xmlns="http://www.midgard-project.org/repligard/1.4">
 
-    <type name="com_meego_devprogram_device" table="com_meego_devprogram_device">
+    <type name="com_meego_devprogram_provider" table="com_meego_devprogram_provider">
         <user_values>
             <typeof>http://rdfs.org/sioc/ns#Forum</typeof>
             <namespaces>sioc:http://rdfs.org/sioc/ns#,dcterms:http://purl.org/dc/terms/</namespaces>
         </user_values>
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="name" type="string" unique="yes">
+            <description>Name of the provider</description>
+        </property>
+        <property name="url" type="string">
+            <description>URL pointing to a site of the provider</description>
+            <contenttype>url</contenttype>
+        </property>
+        <property name="primarycontactname" type="string">
+            <description>Name of the primary contact person</description>
+            <required>true</required>
+        </property>
+        <property name="primarycontactemail" type="string">
+            <description>Email address of the primary contact person</description>
+            <required>true</required>
+            <contenttype>email</contenttype>
+        </property>
+        <property name="primarycontactphone" type="string">
+            <description>Phone number of the primary contact person</description>
+        </property>
+    </type>
+
+    <type name="com_meego_devprogram_device" table="com_meego_devprogram_device" parent="com_meego_devprogram_provider">
+        <user_values>
+            <typeof>http://rdfs.org/sioc/ns#Forum</typeof>
+            <namespaces>sioc:http://rdfs.org/sioc/ns#,dcterms:http://purl.org/dc/terms/</namespaces>
+        </user_values>
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="provider" type="unsigned integer" link="com_meego_devprogram_provider:id" parentfield="provider">
+            <description>The provider's id who provides the device</description>
+            <required>true</required>
         </property>
         <property name="name" type="string" unique="yes">
             <description>Unique name of the device</description>
@@ -85,6 +118,10 @@
         </property>
         <property name="url" type="string">
             <description>URL pointing to a page with more details about the program (e.g. a vendor's page)</description>
+            <contenttype>url</contenttype>
+        </property>
+        <property name="customformurl" type="string">
+            <description>URL pointing to a custom form where the program accepts applications</description>
             <contenttype>url</contenttype>
         </property>
         <property name="multiple" type="boolean">
