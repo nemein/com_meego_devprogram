@@ -293,8 +293,13 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      */
     public function get_latest_program()
     {
+        $program = null;
         $programs = self::get_programs(array('status' => CMD_PROGRAM_OPEN));
-        $program = array_shift($programs);
+
+        if (count($programs))
+        {
+            $program = array_shift($programs);
+        }
 
         return $program;
     }
