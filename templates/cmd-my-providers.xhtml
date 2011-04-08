@@ -1,0 +1,19 @@
+<div class="section" tal:condition="user">
+    <div id="block-menu_block-1" class="block block-menu_block region-odd odd region-count-1 count-1 block-garage">
+
+        <h2 class="title" i18n:translate="'title_my_providers'">My Providers</h2>
+
+        <div class="content">
+            <div class="menu-block-1 menu-name-primary-links menu-level-2">
+                <ul class="menu my">
+                    <li class="leaf first" tal:condition="create_provider_url">
+                        <a tal:attributes="href create_provider_url" i18n:translate="'title_create_provider'"></a>
+                    </li>
+                    <li class="leaf" tal:condition="true: com_meego_devprogram/my_providers" tal:repeat="provider com_meego_devprogram/my_providers">
+                        <a tal:attributes="href provider/read_url">${provider/title}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

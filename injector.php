@@ -12,6 +12,12 @@ define('CMD_APPLICATION_APPROVED', 2);
 define('CMD_APPLICATION_DENIED', 3);
 define('CMD_APPLICATION_CANCELLED', 9);
 
+define('CMD_MEMBERSHIP_PENDING', 0);
+define('CMD_MEMBERSHIP_MOREINFO', 1);
+define('CMD_MEMBERSHIP_APPROVED', 2);
+define('CMD_MEMBERSHIP_DENIED', 3);
+define('CMD_MEMBERSHIP_CANCELLED', 9);
+
 define('CMD_PROGRAM_OPEN', 1);
 define('CMD_PROGRAM_CLOSED', 0);
 
@@ -64,6 +70,13 @@ class com_meego_devprogram_injector
         if ($this->mvc->authentication->is_user())
         {
             $request->set_data_item('user', true);
+
+            $create_provider_url = $this->mvc->dispatcher->generate_url
+            (
+                'provider_create', array(), $request
+            );
+
+            $request->set_data_item('create_provider_url', $create_provider_url);
 
             $create_device_url = $this->mvc->dispatcher->generate_url
             (

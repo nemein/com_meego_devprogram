@@ -25,11 +25,17 @@ msgstr "List Open Programs"
 msgid "title_list_of_open_programs"
 msgstr "List of open programs"
 
+msgid "title_create_provider"
+msgstr "Create Provider"
+
 msgid "title_create_device"
 msgstr "Create Device"
 
 msgid "title_create_program"
 msgstr "Create Program"
+
+msgid "title_my_providers"
+msgstr "My Providers"
 
 msgid "title_my_devices"
 msgstr "My Devices"
@@ -85,6 +91,12 @@ msgstr "Title"
 msgid "tip_device_title"
 msgstr "Pretty name of the device that will be used accross these pages"
 
+msgid "label_device_provider"
+msgstr "Provider"
+
+msgid "tip_device_provider"
+msgstr "The provider is usually a company who provides the device"
+
 msgid "label_device_description"
 msgstr "Description"
 
@@ -118,11 +130,11 @@ msgstr "Device model"
 msgid "tip_device_model"
 msgstr "Model of the device, e.g. N900"
 
-msgid "label_device_type"
-msgstr "Device type"
+msgid "label_device_platform"
+msgstr "Platform"
 
-msgid "tip_device_type"
-msgstr "The type of the device, e.g. netbook, tablet, handset"
+msgid "tip_device_platform"
+msgstr "The platform of the device, e.g. netbook, tablet, handset"
 
 msgid "label_device_url"
 msgstr "URL for more info"
@@ -155,7 +167,7 @@ msgid "label_program_quantity"
 msgstr "Quantity"
 
 msgid "tip_program_quantity"
-msgstr "The amount of devices offered withinthe program"
+msgstr "The amount of devices offered within the program"
 
 msgid "label_program_discount"
 msgstr "Discount percentage"
@@ -318,5 +330,169 @@ msgstr "Latest Program"
 
 msgid "title_closing_programs"
 msgstr "Closing Soon"
+
+msgid "label_provider_name"
+msgstr "Provider name"
+
+msgid "tip_provider_name"
+msgstr "Name of the provider. It is used in URLs, so it must be unique"
+
+msgid "label_provider_title"
+msgstr "Provider's Name"
+
+msgid "tip_provider_title"
+msgstr "Pretty name of the provider that will be used accross the pages"
+
+msgid "label_provider_primarycontactname"
+msgstr "Primary contact person"
+
+msgid "tip_provider_primarycontactname"
+msgstr "Name of the primary contact person from the provider"
+
+msgid "label_provider_primarycontactemail"
+msgstr "Primary contact's email address"
+
+msgid "tip_provider_primarycontactnemail"
+msgstr "Email address of the primary contact person from the provider"
+
+msgid "label_provider_primarycontactphone"
+msgstr "Primary contact's phone number"
+
+msgid "tip_provider_primarycontactphone"
+msgstr "Phone number of the primary contact person from the provider"
+
+msgid "label_provider_url"
+msgstr "Website"
+
+msgid "tip_provider_url"
+msgstr "Link to a page showing more details on the provider"
+
+msgid "question_provider_delete"
+msgstr "Are you sure you want to delete the provider called: ${provider_name}?"
+
+msgid "command_provider_update"
+msgstr "Update provider"
+
+msgid "command_provider_delete"
+msgstr "Delete provider"
+
+msgid "command_provider_join"
+msgstr "Request Membership"
+
+msgid "title_membership_form"
+msgstr "Membership request to ${provider}"
+
+msgid "label_membership_reason"
+msgstr "Reason"
+
+msgid "tip_membership_reason"
+msgstr "Describe the reason of your membership request"
+
+msgid "command_provider_list_memberships"
+msgstr "List Memberships"
+
+
+msgid "note_number_of_memberships"
+msgstr "Memberships: ${number}"
+
+msgid "feedback_no_memberships"
+msgstr "The provider has no members yet."
+
+msgid "title_memberships_for_program"
+msgstr "List of memberships for ${provider}"
+
+msgid "label_membership_submitter"
+msgstr "Submitter"
+
+msgid "title_membership_submitter"
+msgstr "Submitted by: ${username}"
+
+msgid "command_membership_approve"
+msgstr "Approve"
+
+msgid "command_membership_request_more_info"
+msgstr "Request More Information"
+
+msgid "command_membership_deny"
+msgstr "Deny"
+
+msgid "title_membership_decision"
+msgstr "Membership Decision"
+
+msgid "label_membership_remarks"
+msgstr "Remarks"
+
+msgid "tip_membership_remarks"
+msgstr "Feedback from the provider"
+
+msgid "label_membership_decision"
+msgstr "Decision"
+
+msgid "label_membership_decision_moreinfo"
+msgstr "Request More Information"
+
+msgid "label_membership_decision_approve"
+msgstr "Approve Membership"
+
+msgid "label_membership_decision_deny"
+msgstr "Deny Membership"
+
+msgid "label_membership_state_pending"
+msgstr "pending"
+
+msgid "label_membership_state_approved"
+msgstr "approved"
+
+msgid "label_membership_state_moreinfo"
+msgstr "requested more information"
+
+msgid "label_membership_state_denied"
+msgstr "denied"
+
+msgid "label_membership_state_cancelled"
+msgstr "cancelled"
+
+msgid "label_membership_has_update"
+msgstr "Membership updated"
+
+msgid "command_update_membership"
+msgstr "Update Membership"
+
+msgid "command_withdraw_membership"
+msgstr "Withdraw Request"
+
+msgid "title_memberships_for_provider"
+msgstr "List of members"
+
+msgid "title_my_pending_memberships"
+msgstr "Pending Memberships"
+
+msgid "title_my_memberships"
+msgstr "My Memberships"
+
+msgid "question_membership_delete"
+msgstr "Are you sure you want to delete your membership at: ${provider_name}?"
+
+msgid "note_already_member_of_provider"
+msgstr "You already have a membership request."
+
+msgid "note_current_memberships"
+msgstr "Please check it here:"
+
+msgid "label_provider_original_creator"
+msgstr "Original creator of the provider"
+
+msgid "label_program_customformurl"
+msgstr "URL to custom application form"
+
+msgid "tip_program_customformurl"
+msgstr "URL pointing to a custom form where the program accepts applications"
+
+
+
+
+
+
+
 
 

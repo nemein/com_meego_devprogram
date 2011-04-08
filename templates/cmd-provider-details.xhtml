@@ -1,0 +1,37 @@
+<div class="provider" tal:condition="true: com_meego_devprogram/provider" tal:define="provider com_meego_devprogram/provider">
+
+    <h2 class="title">
+        <a tal:attributes="href provider/url">${provider/title}</a>
+    </h2>
+
+    <div class="name">
+        <div class="label" i18n:translate="'label_provider_primarycontactname'"></div>
+        ${provider/primarycontactname}
+    </div>
+    <div class="email">
+        <div class="label" i18n:translate="'label_provider_primarycontactemail'"></div>
+        ${provider/primarycontactemail}
+    </div>
+    <div class="phone">
+        <div class="label" i18n:translate="'label_provider_primarycontactphone'"></div>
+        ${provider/primarycontactphone}
+    </div>
+
+    <ul class="toolbar" tal:condition="com_meego_devprogram/can_manage">
+        <li>
+            <a class="action" tal:attributes="href provider/update_url" i18n:translate="'command_provider_update'"></a>
+        </li>
+        <li tal:condition="not: com_meego_devprogram/can_not_delete">
+            <a class="action" tal:attributes="href provider/delete_url" i18n:translate="'command_provider_delete'"></a>
+        </li>
+        <li tal:condition="provider/number_of_members">
+            <a class="action" tal:attributes="href provider/list_memberships_url" i18n:translate="'command_provider_list_memberships'"></a>
+        </li>
+    </ul>
+
+    <ul class="toolbar" tal:condition="com_meego_devprogram/can_join">
+        <li>
+            <a class="action" tal:attributes="href provider/join_url" i18n:translate="'command_provider_join'"></a>
+        </li>
+    </ul>
+</div>

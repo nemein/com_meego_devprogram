@@ -1,4 +1,4 @@
-version: 0.0.1
+version: 0.0.2
 
 process_injector: com_meego_devprogram_injector
 template_injector: com_meego_devprogram_injector
@@ -14,6 +14,41 @@ routes:
         action: index
         template_aliases:
             content: cmd-index
+
+    provider_create:
+        path: /provider/create
+        controller: com_meego_devprogram_controllers_providers
+        action: create
+        template_aliases:
+            content: cmd-edit-form
+
+    provider_read:
+        path: /provider/read/{$provider_name}
+        controller: com_meego_devprogram_controllers_providers
+        action: read
+        template_aliases:
+            content: cmd-provider-details
+
+    provider_update:
+        path: /provider/update/{$provider_name}
+        controller: com_meego_devprogram_controllers_providers
+        action: update
+        template_aliases:
+            content: cmd-edit-form
+
+    provider_delete:
+        path: /provider/delete/{$provider_name}
+        controller: com_meego_devprogram_controllers_providers
+        action: delete
+        template_aliases:
+            content: cmd-delete-form
+
+    provider_members:
+        path: /provider/{$provider_name}/members
+        controller: com_meego_devprogram_controllers_providers
+        action: members_for_provider
+        template_aliases:
+            content: cmd-list-memberships
 
     device_create:
         path: /device/create
@@ -92,6 +127,13 @@ routes:
         template_aliases:
             content: cmd-list-applications
 
+    my_providers:
+        path: /myproviders
+        controller: com_meego_devprogram_controllers_providers
+        action: my_providers_list
+        template_aliases:
+            content: cmd-my-providers
+
     my_devices:
         path: /mydevices
         controller: com_meego_devprogram_controllers_devices
@@ -154,4 +196,53 @@ routes:
         action: judge
         template_aliases:
             content: cmd-edit-application-judge-form
+
+    my_memberships:
+        path: /mymemberships
+        controller: com_meego_devprogram_controllers_memberships
+        action: my_memberships_list
+        template_aliases:
+            content: cmd-my-memberships
+
+    my_pending_memberships:
+        path: /mymemberships
+        controller: com_meego_devprogram_controllers_memberships
+        action: my_pending_memberships_list
+        template_aliases:
+            content: cmd-my-memberships
+
+    my_membership_create:
+        path: /mymemberships/create/{$provider_name}
+        controller: com_meego_devprogram_controllers_memberships
+        action: create
+        template_aliases:
+            content: cmd-edit-membership-form
+
+    my_membership_read:
+        path: /mymemberships/read/{$guid:membership_guid}
+        controller: com_meego_devprogram_controllers_memberships
+        action: read
+        template_aliases:
+            content: cmd-my-membership-details
+
+    my_membership_update:
+        path: /mymemberships/update/{$guid:membership_guid}
+        controller: com_meego_devprogram_controllers_memberships
+        action: update
+        template_aliases:
+            content: cmd-edit-membership-form
+
+    my_membership_delete:
+        path: /mymemberships/delete/{$guid:membership_guid}
+        controller: com_meego_devprogram_controllers_memberships
+        action: delete
+        template_aliases:
+            content: cmd-delete-form
+
+    membership_judge:
+        path: /membership/judge/{$guid:membership_guid}
+        controller: com_meego_devprogram_controllers_memberships
+        action: judge
+        template_aliases:
+            content: cmd-edit-membership-judge-form
 

@@ -1,0 +1,25 @@
+<div class="application" tal:condition="true: com_meego_devprogram/provider" tal:define="provider com_meego_devprogram/provider">
+
+    <h2 class="title" i18n:translate="'title_membership_form'">
+        <tal:block i18n:name="provider">${provider/title}</tal:block>
+    </h2>
+
+    <div class="status" tal:condition="true: com_meego_devprogram/mymemberships" tal:define="mymemberships com_meego_devprogram/mymemberships">
+        <span i18n:translate="'note_already_member_of_provider'"></span>
+        <span i18n:translate="'note_current_memberships'"></span>
+        <ul>
+            <li tal:repeat="membership mymemberships">
+                <a tal:attributes="href membership/read_url">${membership/providertitle}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="form" tal:condition="true: com_meego_devprogram/form">
+
+        <div class="edit">
+            <tal:block tal:content="structure com_meego_devprogram/form"></tal:block>
+        </div>
+
+    </div>
+
+</div>

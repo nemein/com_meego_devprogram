@@ -32,13 +32,10 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
 
         if (is_object($user))
         {
-            if ($program->metadata->creator == $user->person)
-            {
-                $program->read_my_url = com_meego_devprogram_utils::get_url('my_program_read', array ('program_name' => $program->name));
-                $program->list_apps_url = com_meego_devprogram_utils::get_url('program_applications', array ('program_name' => $program->name));
-                // set the number of apps (all but the cancelled ones) under this program
-                $program->number_of_applications = count(com_meego_devprogram_apputils::get_applications_by_program($program->id));
-            }
+            $program->read_my_url = com_meego_devprogram_utils::get_url('my_program_read', array ('program_name' => $program->name));
+            $program->list_apps_url = com_meego_devprogram_utils::get_url('program_applications', array ('program_name' => $program->name));
+            // set the number of apps (all but the cancelled ones) under this program
+            $program->number_of_applications = count(com_meego_devprogram_apputils::get_applications_by_program($program->id));
         }
 
         return $program;
@@ -233,6 +230,8 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      */
     public static function get_open_programs_of_current_user()
     {
+        $programs = array();
+
         // retrieve the user's guid based on the login name
         $user = self::require_login();
 
@@ -241,9 +240,27 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             return null;
         }
 
-        $filters = array('status' => CMD_PROGRAM_OPEN, 'creator' => $user->person);
+        // all devices from this user and by fellow members of the same provider
+        $memberships = com_meego_devprogram_membutils::get_memberships_of_current_user();
 
-        return self::get_programs($filters);
+        foreach($memberships as $membership)
+        {
+            // check status
+            if ($membership->status == CMD_MEMBERSHIP_APPROVED)
+            {
+                // get device objects
+                $devices = com_meego_devprogram_devutils::get_devices(array('provider' => $membership->provider));
+
+                // find all programs belonging all devices found before
+                foreach ($devices as $device)
+                {
+                    $filters = array('status' => CMD_PROGRAM_OPEN, 'device' => $device->id);
+                    $programs = array_merge($programs, self::get_programs($filters));
+                }
+            }
+        }
+
+        return $programs;
     }
 
     /**
@@ -278,7 +295,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      */
     public function delete_expired_programs()
     {
-        $programs = get_programs(array('status' => CMD_PROGRAM_CLOSED));
+        $programs = self::get_programs(array('status' => CMD_PROGRAM_CLOSED));
 
         foreach($programs as $program)
         {

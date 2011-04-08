@@ -1,4 +1,4 @@
-# map of available device platforms and their pretty names used in the UI
+# map of available device platforms and their pretty namesless used in the UI
 platforms:
     netbook: Netbook
     entrydesktop: Entry-level Desktop

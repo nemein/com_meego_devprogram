@@ -241,3 +241,35 @@ list-style: none;
 border-bottom: 1px dashed lightgrey;
 padding: 0 0 1em 0;
 }
+
+div.section div.provider{
+margin: 1em 0 0 0;
+}
+
+div.device div,
+div.provider div {
+margin: 0 0 1em 0;
+}
+
+div.device div.description {
+margin: 1em 0 1em 0;
+text-align: justify;
+}
+
+div.device div .label,
+div.provider div .label,
+div.application div.submitter .label,
+div.application div.provider .label,
+div.application div.reason .label {
+font-weight: bold;
+margin: 0 0 0.5em 0;
+}
+
+div.application div.submitter,
+div.application div.provider {
+margin: 1em 0 0 0;
+}
+
+div.application .reason {
+margin: 1em 0 0 0;
+}

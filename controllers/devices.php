@@ -75,6 +75,54 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
 
         # remove the name field, we will genarate it from title
         $this->form->__unset('name');
+
+        # change the default widget of provider field
+        $providers = com_meego_devprogram_provutils::get_providers_of_current_user();
+
+        foreach ($providers as $provider)
+        {
+            $provider_options[] = array
+            (
+                'description' => $provider->title,
+                'value' => $provider->id
+            );
+        }
+
+        $provider = new midgardmvc_helper_forms_field_integer('provider', true);
+        $provider->set_value($this->object->provider);
+        $widget = $provider->set_widget('selectoption');
+        $widget->set_label($this->mvc->i18n->get('label_device_provider'));
+
+        if (is_array($provider_options))
+        {
+            $widget->set_options($provider_options);
+        }
+
+        $this->form->__set('provider', $provider);
+
+        # change the default widget of platform field
+        $platforms = $this->mvc->configuration->platforms;
+
+        foreach ($platforms as $key => $title)
+        {
+            $platform_options[] = array
+            (
+                'description' => $title,
+                'value' => $key
+            );
+        }
+
+        $platform = new midgardmvc_helper_forms_field_text('platform', true);
+        $platform->set_value($this->object->platform);
+        $widget = $platform->set_widget('selectoption');
+        $widget->set_label($this->mvc->i18n->get('label_device_platform'));
+
+        if (is_array($platform_options))
+        {
+            $widget->set_options($platform_options);
+        }
+
+        $this->form->__set('platform', $platform);
     }
 
     /**
@@ -89,6 +137,17 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
         {
             return;
         }
+
+        // check if user has at least one provider
+        $this->data['user_has_provider'] = com_meego_devprogram_provutils::user_has_providers();
+
+        if (! $this->data['user_has_provider'])
+        {
+            return false;
+        }
+
+        // get own devices
+        // and the ones that belong to providers the user is also member of
         $this->data['my_devices'] = com_meego_devprogram_devutils::get_devices_of_current_user();
     }
 
@@ -117,6 +176,7 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
     public function post_create(array $args)
     {
         $this->get_create($args);
+
         try
         {
             $transaction = new midgard_transaction();
@@ -157,7 +217,7 @@ class com_meego_devprogram_controllers_devices extends midgardmvc_core_controlle
 
         $this->data['can_not_delete'] = com_meego_devprogram_progutils::any_open_program_uses_device($this->object->id);
 
-        $this->data['delete_question'] = $this->mvc->i18n->get('question_device_delete', null, array('device_name' => $this->object->name));
+        $this->data['delete_question'] = $this->mvc->i18n->get('question_device_delete', null, array('device_name' => $this->object->title));
     }
 
     /**

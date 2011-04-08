@@ -44,6 +44,9 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         {
             $this->data['program'] = $this->object;
             midgardmvc_core::get_instance()->head->set_title($this->object->title);
+
+            $device = new com_meego_devprogram_device($this->object->device);
+            $this->object->provider = new com_meego_devprogram_provider($device->provider);
         }
     }
 
@@ -100,12 +103,12 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         $this->form->__set('duedate', $duedate);
 
         # change the default widget of device field
-        $devices = com_meego_devprogram_devutils::get_devices();
+        $devices = com_meego_devprogram_devutils::get_devices_of_current_user();
         foreach ($devices as $device)
         {
             $device_options[] = array
             (
-                'description' => $device->name,
+                'description' => $device->title,
                 'value' => $device->id
             );
         }
@@ -290,14 +293,18 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
     {
         $this->load_object($args);
 
-        // check if user owns the program or he / she is an admin
-        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        // admin of the program or belongs to the same provider
+        if (   com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($this->object->provider->id))
+        {
+            $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
+            $this->data['applications'] = com_meego_devprogram_apputils::get_applications_by_program($this->object->id);
+        }
+        else
         {
             // nice try, redirect to standard read page
             $this->relocate_to_read();
         }
-        $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
-        $this->data['applications'] = com_meego_devprogram_apputils::get_applications_by_program($this->object->id);
     }
 
     /**
@@ -313,7 +320,9 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
 
         $this->load_object($args);
 
-        if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        // admin of the program or belongs to the same provider
+        if (   com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($this->object->provider->id))
         {
             if (! $this->object->number_of_applications)
             {

@@ -1,0 +1,36 @@
+<div class="info" tal:condition="not: com_meego_devprogram/memberships">
+    <div class="status" i18n:translate="'feedback_no_memberships'"></div>
+    <a class="back" tal:attributes="href com_meego_devprogram/index_url" i18n:translate="'command_back_to_index'"></a>
+</div>
+
+<div class="list" tal:condition="true: com_meego_devprogram/memberships">
+
+    <h2 i18n:translate="'title_memberships_for_provider'" tal:define="provider com_meego_devprogram/provider">
+        <tal:block i18n:name="provider">${provider/title}</tal:block>
+    </h2>
+
+    <ul class="applications">
+        <li class="application" tal:repeat="membership com_meego_devprogram/memberships">
+            <div class="brief">
+                    <h2 class="title">
+                        ${membership/submitter}
+                        <span tal:attributes="class php: 'right ' . membership.state_css">${membership/decision}</span>
+                    </h2>
+
+                    <div class="state">
+                        <span class="green" tal:condition="true: membership/has_update" i18n:translate="'label_membership_has_update'"></span>
+                    </div>
+
+                    <div class="submitted" i18n:translate="'title_membership_submitter'">
+                        <span class="submitter" i18n:name="username">${membership/submitter}</span>
+                    </div>
+                    <div class="reason">
+                        ${membership/reason}
+                    </div>
+            </div>
+            <div class="actions">
+                <a class="action" tal:attributes="href membership/judge_url" i18n:translate="'command_read_details'"></a>
+            </div>
+        </li>
+    </ul>
+</div>

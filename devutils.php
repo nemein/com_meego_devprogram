@@ -8,22 +8,110 @@
 class com_meego_devprogram_devutils extends com_meego_devprogram_utils
 {
     /**
+     * Adds some handy properties to device object
+     *
+     * @param object com_meego_devprogram_device object
+     * @return object extended com_meego_devprogram_device object
+     */
+    private function extend_device($object = null)
+    {
+        // q->toggle_readonly(false) does not work so we need a new object
+        $device = new com_meego_devprogram_device($object->guid);
+
+        $device->read_url = com_meego_devprogram_utils::get_url('device_read', array ('device_name' => $device->name));
+        $device->update_url = com_meego_devprogram_utils::get_url('device_update', array ('device_name' => $device->name));
+        $device->delete_url = com_meego_devprogram_utils::get_url('device_delete', array ('device_name' => $device->name));
+
+        $mvc = midgardmvc_core::get_instance();
+
+        // set the pretty name of the device platform
+        $device->prettyplatform = $mvc->configuration->platforms[$device->platform];
+
+        // set the provider of the device
+        $device->providerobject = new com_meego_devprogram_provider($device->provider);
+
+        return $device;
+    }
+
+    /**
      * Retrieves all devices
      *
+     * @param array filters, possible members: deleted, creator, name, provider
+     *              if multiple members used then we do a logical AND with them
      * @return array array of com_meego_devprogram_device objects
      */
-    public static function get_devices()
+    public static function get_devices(array $filters)
     {
+        $devices = null;
+
         $storage = new midgard_query_storage('com_meego_devprogram_device');
 
         $q = new midgard_query_select($storage);
+
+        if (count($filters) > 1)
+        {
+            $qc = new midgard_query_constraint_group('AND');
+        }
+
+        foreach ($filters as $filter => $value)
+        {
+            switch ($filter)
+            {
+                case 'deleted':
+                    if ($value)
+                    {
+                        $q->include_deleted(true);
+                    }
+                    break;
+                case 'creator':
+                    // check if the value is a real guid
+                    if (mgd_is_guid($value))
+                    {
+                        $constraint = new midgard_query_constraint(
+                            new midgard_query_property('metadata.creator'),
+                            '=',
+                            new midgard_query_value($value)
+                        );
+                    }
+                    break;
+                case 'name':
+                case 'provider':
+                    $constraint = new midgard_query_constraint(
+                        new midgard_query_property($filter),
+                        '=',
+                        new midgard_query_value($value)
+                    );
+                    break;
+            }
+
+            // set the constraint
+            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
+        }
+
+        $q->set_constraint($qc);
+
+        $q->add_order(new midgard_query_property('metadata.created'), SORT_DESC);
+
         $q->execute();
 
-        return $q->list_objects();
+        // does not seem to work
+        // @bug: $q->toggle_read_only(false);
+        $objects = $q->list_objects();
+
+        if (count($objects))
+        {
+            foreach ($objects as $object)
+            {
+                $devices[] = self::extend_device($object);
+            }
+        }
+
+        return $devices;
     }
 
     /**
      * Determines if the current user has registered device(s)
+     * or the providers the user belongs to have registered device(s)
      *
      * @return boolean true, if user has devices, false otherwise
      */
@@ -33,20 +121,9 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
 
         $user = self::require_login();
 
-        $storage = new midgard_query_storage('com_meego_devprogram_device');
+        $devices = self::get_devices_of_current_user();
 
-        $q = new midgard_query_select($storage);
-
-        $qc = new midgard_query_constraint(
-            new midgard_query_property('metadata.creator'),
-            '=',
-            new midgard_query_value($user->person)
-        );
-
-        $q->set_constraint($qc);
-        $q->execute();
-
-        if ($q->get_results_count())
+        if (count($devices))
         {
             $retval = true;
         }
@@ -67,27 +144,11 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
 
         if (strlen($name))
         {
-            $storage = new midgard_query_storage('com_meego_devprogram_device');
-
-            $q = new midgard_query_select($storage);
-
-            $qc = new midgard_query_constraint(
-                new midgard_query_property('name'),
-                '=',
-                new midgard_query_value($name)
-            );
-
-            $q->set_constraint($qc);
-            $q->execute();
-
-            $devices = $q->list_objects();
+            $devices = self::get_devices(array('name' => $name));
 
             if (count($devices))
             {
-                $device = new com_meego_devprogram_device($devices[0]->guid);
-                $device->read_url = com_meego_devprogram_utils::get_url('device_read', array ('device_name' => $device->name));
-                $device->update_url = com_meego_devprogram_utils::get_url('device_update', array ('device_name' => $device->name));
-                $device->delete_url = com_meego_devprogram_utils::get_url('device_delete', array ('device_name' => $device->name));
+                $device = $devices[0];
             }
         }
 
@@ -106,35 +167,7 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
 
         if (mgd_is_guid($guid))
         {
-            $storage = new midgard_query_storage('com_meego_devprogram_device');
-
-            $q = new midgard_query_select($storage);
-
-            $qc = new midgard_query_constraint(
-                new midgard_query_property('metadata.creator'),
-                '=',
-                new midgard_query_value($guid)
-            );
-
-            $q->set_constraint($qc);
-            $q->execute();
-
-            // add read, delete, update urls to objects
-            $objects = $q->list_objects();
-
-            if (count($objects))
-            {
-                $mvc = midgardmvc_core::get_instance();
-
-                foreach ($objects as $object)
-                {
-                    $object->read_url = com_meego_devprogram_utils::get_url('device_read', array ('device_name' => $object->name));
-                    $object->update_url = com_meego_devprogram_utils::get_url('device_update', array ('device_name' => $object->name));
-                    $object->delete_url = com_meego_devprogram_utils::get_url('device_delete', array ('device_name' => $object->name));
-
-                    $devices[] = $object;
-                }
-            }
+            $devices = self::get_devices(array('creator' => $guid));
         }
 
         return $devices;
@@ -169,6 +202,8 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
      */
     public static function get_devices_of_current_user()
     {
+        $devices = array();
+
         $user = self::require_login();
 
         if (! is_object($user))
@@ -176,6 +211,19 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
             return null;
         }
 
-        return self::get_devices_by_creator_guid($user->person);
+        // all devices from this user and by fellow members of the same provider
+        $memberships = com_meego_devprogram_membutils::get_memberships_of_current_user();
+
+        foreach($memberships as $membership)
+        {
+            // check status
+            if ($membership->status == CMD_MEMBERSHIP_APPROVED)
+            {
+                // get provider objects and add it to the array
+                $devices = array_merge($devices, self::get_devices(array('provider' => $membership->provider)));
+            }
+        }
+
+        return $devices;
     }
 }

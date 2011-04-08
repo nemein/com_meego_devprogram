@@ -20,9 +20,9 @@
 
     <div class="description">${program/description}</div>
 
-    <ul class="toolbar">
+    <ul class="toolbar" tal:condition="com_meego_devprogram/can_apply">
         <li>
-            <a class="action" tal:condition="com_meego_devprogram/can_apply" tal:attributes="href program/apply_url" i18n:translate="'command_apply_for_program'"></a>
+            <a class="action" tal:attributes="href program/apply_url" i18n:translate="'command_apply_for_program'"></a>
         </li>
     </ul>
 

@@ -1,12 +1,23 @@
-<h4 i18n:translate="'tip_device_description'"></h4>
-
 <div class="device" tal:condition="true: com_meego_devprogram/device" tal:define="device com_meego_devprogram/device">
 
-    <h2>${device/title}</h2>
+    <h2>
+        <a tal:attributes="href device/url">${device/title}</a>
+    </h2>
 
-    <div class="model">${device/model}</div>
+    <div class="model">
+        <div class="label" i18n:translate="'label_device_model'"></div>
+        ${device/model}
+    </div>
 
-    <div class="description">${device/description}</div>
+    <div class="platform">
+        <div class="label" i18n:translate="'label_device_platform'"></div>
+        ${device/prettyplatform}
+    </div>
+
+    <div class="description">
+        <div class="label" i18n:translate="'label_device_description'"></div>
+        ${device/description}
+    </div>
 
     <ul class="toolbar" tal:condition="com_meego_devprogram/can_manage">
         <li>
