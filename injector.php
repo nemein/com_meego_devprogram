@@ -106,6 +106,12 @@ class com_meego_devprogram_injector
 
         $request->set_data_item('open_programs_url', $open_programs_url);
 
+        // set more info url for the menu in the sidebar
+        $more_info_url = $this->mvc->configuration->more_info_url;
+
+        $request->set_data_item('more_info_url', $more_info_url);
+
+        //
         if ($this->mvc->configuration->enable_breadcrumb)
         {
             // add breadcrumb if enabled in configuration

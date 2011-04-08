@@ -1,3 +1,6 @@
+# link to a page describing details of developer programs
+more_info_url: http://wiki.meego.com/Community_Office/Community_device_program
+
 # map of available device platforms and their pretty namesless used in the UI
 platforms:
     netbook: Netbook
