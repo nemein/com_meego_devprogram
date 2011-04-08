@@ -30,8 +30,8 @@ class com_meego_devprogram_membutils extends com_meego_devprogram_utils
 
             if (is_object($user))
             {
-                // the login name of the person requested membership
-                $membership->submitter = $user->login;
+                // name of the person requested membership
+                $membership->submitter = $user->firstname; //. ' ' . $user->lastname;
             }
 
             // pretty name of the provider

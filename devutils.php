@@ -42,7 +42,7 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
      */
     public static function get_devices(array $filters)
     {
-        $devices = null;
+        $devices = array();
 
         $storage = new midgard_query_storage('com_meego_devprogram_device');
 
@@ -74,6 +74,7 @@ class com_meego_devprogram_devutils extends com_meego_devprogram_utils
                         );
                     }
                     break;
+                case 'id':
                 case 'name':
                 case 'provider':
                     $constraint = new midgard_query_constraint(

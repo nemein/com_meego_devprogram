@@ -44,9 +44,6 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
         {
             $this->data['program'] = $this->object;
             midgardmvc_core::get_instance()->head->set_title($this->object->title);
-
-            $device = new com_meego_devprogram_device($this->object->device);
-            $this->object->provider = new com_meego_devprogram_provider($device->provider);
         }
     }
 

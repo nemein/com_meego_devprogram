@@ -35,8 +35,14 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             $program->read_my_url = com_meego_devprogram_utils::get_url('my_program_read', array ('program_name' => $program->name));
             $program->list_apps_url = com_meego_devprogram_utils::get_url('program_applications', array ('program_name' => $program->name));
             // set the number of apps (all but the cancelled ones) under this program
-            $program->number_of_applications = count(com_meego_devprogram_apputils::get_applications_by_program($program->id));
+            $program->number_of_applications = com_meego_devprogram_apputils::get_count_applications_by_program($program->id);
         }
+
+        // get the provider of the device and set a new property to the program
+        $devices = com_meego_devprogram_devutils::get_devices(array('id' => $program->device));
+        $providers = com_meego_devprogram_provutils::get_providers(array('guid' => $devices[0]->providerobject->guid));
+
+        $program->provider = $providers[0];
 
         return $program;
     }
@@ -48,13 +54,13 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      * @return object an extended com_meego_devprogram_program object
      *                added some useful urls as new properties
      */
-    public function get_program_by_id($id = '')
+    public function get_program_by_id($id = 0)
     {
         $program = null;
 
-        if (strlen($id))
+        if ($id)
         {
-            $program = self::extend_program(new com_meego_devprogram_program($id));
+            $program = self::get_programs(array('id' => $id));
         }
 
         return $program;
@@ -69,7 +75,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
      */
     public static function get_programs(array $filters)
     {
-        $programs = null;
+        $programs = array();
 
         $storage = new midgard_query_storage('com_meego_devprogram_program');
 
@@ -101,6 +107,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
                         );
                     }
                     break;
+                case 'id':
                 case 'name':
                 case 'device':
                     $constraint = new midgard_query_constraint(

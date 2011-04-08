@@ -38,7 +38,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         $this->data['application'] = $this->object;
 
         // also get the program the application was submitted for
-        $this->data['program'] = com_meego_devprogram_progutils::get_program_by_id($this->object->program);
+        $this->data['program'] = $this->object->programobject;
     }
 
     /**
@@ -111,7 +111,7 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         $this->form->__unset('status');
 
         $field = $this->form->add_field('program', 'integer', false);
-        $field->set_value($this->data['program']->id);
+        $field->set_value($this->object->program);
         $field->set_widget('hidden');
 
         # checkbox for the decision
@@ -266,11 +266,9 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
     {
         $this->load_object($args);
 
-        if (   ! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->data['program'])
-            && ! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        if (!  (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($this->object->provider->id)))
         {
-            // not creator of application
-            // not owner of the program the app was created for
             // not an administrator
             // nice try, but sorry, get back to index
             $this->mvc->head->relocate(com_meego_devprogram_utils::get_url('index', array()));

@@ -16,6 +16,9 @@ msgstr "Welcome to DevProgram!"
 msgid "introduction"
 msgstr "This site is a demo of DevProgram, a web application to help the participants of Meego Developer Device Programs. DevProgram aims to bridge a gap between vendors who would like to promote their hardware platforms and developers who are willing to get started with new development environments."
 
+msgid "emails disabled"
+msgstr "Notification emails are disabled in this demo."
+
 msgid "title_menu"
 msgstr "Menu"
 

@@ -82,8 +82,8 @@ class com_meego_devprogram_utils
 
         if (mgd_is_guid($guid))
         {
-            $qb = new midgard_query_builder('midgard_user');
-            $qb->add_constraint('person', '=', $guid);
+            $qb = new midgard_query_builder('midgard_person');
+            $qb->add_constraint('guid', '=', $guid);
 
             $users = $qb->execute();
 

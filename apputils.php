@@ -30,7 +30,7 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
             if (is_object($user))
             {
-                $application->submitter = $user->login;
+                $application->submitter = $user->firstname; #. ' ' . $user->lastname;
             }
 
             // human readable decision state of the application
@@ -75,6 +75,12 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
                 $application->has_update = true;
             }
 
+            // get the program this app is submitted for; get the provider and set it a new property to the app
+            $programs = com_meego_devprogram_progutils::get_programs(array('id' => $application->program));
+
+            $application->programobject = $programs[0];
+            $application->provider = $programs[0]->provider;
+
             return $application;
         }
     }
@@ -103,11 +109,12 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
      * Retrieves applications using various filters
      *
      * @param array filters array
+     * @param boolean flag to extend objects with goodies or not
      *
      * @return array an array of com_meego_devprogram_application objects
      *               extended with some handy urls
      */
-    private static function get_applications(array $filters)
+    private static function get_applications(array $filters, $extend = true)
     {
         $applications = array();
 
@@ -193,7 +200,14 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
 
         foreach ($objects as $object)
         {
-            $applications[] = self::extend_application($object);
+            if ($extend)
+            {
+                $applications[] = self::extend_application($object);
+            }
+            else
+            {
+                $applications[] = $object;
+            }
         }
 
         return $applications;
@@ -252,5 +266,18 @@ class com_meego_devprogram_apputils extends com_meego_devprogram_utils
         $filters = array('program' => $program_id);
 
         return self::get_applications($filters);
+    }
+
+    /**
+     * Retrieves the number of all but cancelled applications by program
+     *
+     * @param integer id of the program
+     * @return integer
+     */
+    public static function get_count_applications_by_program($program_id = null)
+    {
+        $filters = array('program' => $program_id);
+
+        return count(self::get_applications($filters, false));
     }
 }
