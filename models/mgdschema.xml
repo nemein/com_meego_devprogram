@@ -21,6 +21,10 @@
             <property>dcterms:title</property>
             <required>true</required>
         </property>
+        <property name="summary" type="longtext">
+            <description>Short summary of the provider</description>
+            <required>true</required>
+        </property>
         <property name="url" type="string">
             <description>URL pointing to a site of the provider</description>
             <contenttype>url</contenttype>
