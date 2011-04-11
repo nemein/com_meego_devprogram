@@ -29,7 +29,16 @@ msgid "title_list_open_programs"
 msgstr "List Open Programs"
 
 msgid "title_more_info_on_devprograms"
-msgstr "MeeGo Programs"
+msgstr "More on Developer Programs"
+
+msgid "title_links"
+msgstr "Links"
+
+msgid "title_bugtracker"
+msgstr "Issues"
+
+msgid "title_get_involved"
+msgstr "Development"
 
 msgid "title_list_of_open_programs"
 msgstr "List of open programs"

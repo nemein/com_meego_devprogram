@@ -1,6 +1,9 @@
 # link to a page describing details of developer programs
 more_info_url: http://wiki.meego.com/Community_Office/Community_device_program
 
+# link to a bugtracker
+bugtracker_url: https://github.com/nemein/com_meego_devprogram/issues
+
 # map of available device platforms and their pretty namesless used in the UI
 platforms:
     netbook: Netbook

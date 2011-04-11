@@ -111,6 +111,11 @@ class com_meego_devprogram_injector
 
         $request->set_data_item('more_info_url', $more_info_url);
 
+        // set bugtracker url for the menu in the sidebar
+        $bugtracker_url = $this->mvc->configuration->bugtracker_url;
+
+        $request->set_data_item('bugtracker_url', $bugtracker_url);
+
         //
         if ($this->mvc->configuration->enable_breadcrumb)
         {
