@@ -28,6 +28,9 @@ msgstr "Frontpage"
 msgid "title_list_open_programs"
 msgstr "List Open Programs"
 
+msgid "title_list_providers"
+msgstr "List Providers"
+
 msgid "title_more_info_on_devprograms"
 msgstr "More on Developer Programs"
 

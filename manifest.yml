@@ -15,6 +15,13 @@ routes:
         template_aliases:
             content: cmd-index
 
+    providers:
+        path: /providers
+        controller: com_meego_devprogram_controllers_providers
+        action: list
+        template_aliases:
+            content: cmd-list-providers
+
     provider_create:
         path: /provider/create
         controller: com_meego_devprogram_controllers_providers

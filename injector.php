@@ -111,6 +111,14 @@ class com_meego_devprogram_injector
 
         $request->set_data_item('more_info_url', $more_info_url);
 
+        // set list of providers url for the menu in the sidebar
+        $providers_url = $this->mvc->dispatcher->generate_url
+        (
+            'providers', array(), $request
+        );
+
+        $request->set_data_item('providers_url', $providers_url);
+
         // set bugtracker url for the menu in the sidebar
         $bugtracker_url = $this->mvc->configuration->bugtracker_url;
 
