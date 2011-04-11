@@ -4,6 +4,15 @@
         <a tal:attributes="href provider/url">${provider/title}</a>
     </h2>
 
+    <div class="summary">
+        <div class="label" i18n:translate="'label_provider_summary'"></div>
+        ${provider/summary}
+    </div>
+
+    <div class="website">
+        <a class="label" tal:attributes="href provider/url" i18n:translate="'label_provider_url'"></a>
+    </div>
+
     <div class="name">
         <div class="label" i18n:translate="'label_provider_primarycontactname'"></div>
         ${provider/primarycontactname}

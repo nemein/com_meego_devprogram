@@ -251,6 +251,11 @@ div.provider div {
 margin: 0 0 1em 0;
 }
 
+div.provider div.summary {
+margin: 1em 0 1em 0;
+text-align: justify;
+}
+
 div.device div.description {
 margin: 1em 0 1em 0;
 text-align: justify;

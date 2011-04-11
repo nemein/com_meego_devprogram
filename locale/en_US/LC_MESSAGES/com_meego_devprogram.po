@@ -379,6 +379,12 @@ msgstr "Primary contact's phone number"
 msgid "tip_provider_primarycontactphone"
 msgstr "Phone number of the primary contact person from the provider"
 
+msgid "label_provider_summary"
+msgstr "Summary"
+
+msgid "tip_provider_summary"
+msgstr "Short summary about the provider"
+
 msgid "label_provider_url"
 msgstr "Website"
 
@@ -408,7 +414,6 @@ msgstr "Describe the reason of your membership request"
 
 msgid "command_provider_list_memberships"
 msgstr "List Memberships"
-
 
 msgid "note_number_of_memberships"
 msgstr "Memberships: ${number}"
