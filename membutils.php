@@ -142,7 +142,7 @@ class com_meego_devprogram_membutils extends com_meego_devprogram_utils
                     break;
                 case 'provider':
                 case 'person':
-                    if ($value)
+                    if (isset($value))
                     {
                         $constraint = new midgard_query_constraint(
                             new midgard_query_property($filter),
@@ -152,11 +152,11 @@ class com_meego_devprogram_membutils extends com_meego_devprogram_utils
                     }
                     break;
                 case 'status':
-                    if ($value)
+                    if (isset($value))
                     {
                         $constraint = new midgard_query_constraint(
                             new midgard_query_property($filter),
-                            '<',
+                            '=',
                             new midgard_query_value($value)
                         );
                     }
@@ -243,7 +243,6 @@ class com_meego_devprogram_membutils extends com_meego_devprogram_utils
      *
      * @param integer optional parameter to specify a concrete provider
      * @param integer optional parameter to specify a status of membership
-     *                the status of the membership must be less than this value
      *
      * @return array an array of com_meego_devprogram_provider_membership objects
      *         null if user is not logged in
@@ -281,7 +280,7 @@ class com_meego_devprogram_membutils extends com_meego_devprogram_utils
     public function is_current_user_member_of_provider($provider_id = null)
     {
         $retval = false;
-        $memberships = self::get_memberships_of_current_user($provider_id, CMD_MEMBERSHIP_DENIED);
+        $memberships = self::get_memberships_of_current_user($provider_id, CMD_MEMBERSHIP_APPROVED);
 
         if (count($memberships))
         {

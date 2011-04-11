@@ -174,8 +174,14 @@ class com_meego_devprogram_controllers_memberships extends midgardmvc_core_contr
         // check if user is logged in
         if (com_meego_devprogram_utils::get_current_user())
         {
-            // get all requests that have pending or more info status
-            $this->data['my_memberships'] = com_meego_devprogram_membutils::get_memberships_of_current_user(null, CMD_MEMBERSHIP_APPROVED);
+            // get all requests that are pending
+            $this->data['my_pending'] = com_meego_devprogram_membutils::get_memberships_of_current_user(null, CMD_MEMBERSHIP_PENDING);
+
+            // get all requests that need more info
+            $this->data['my_moreinfo'] = com_meego_devprogram_membutils::get_memberships_of_current_user(null, CMD_MEMBERSHIP_MOREINFO);
+
+            // merge the two
+            $this->data['my_memberships'] = array_merge($this->data['my_pending'], $this->data['my_moreinfo']);
         }
     }
 
@@ -302,8 +308,8 @@ class com_meego_devprogram_controllers_memberships extends midgardmvc_core_contr
     {
         $this->load_object($args);
 
-        if (   ! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->data['provider'])
-            && ! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        if (   ! (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($this->data['provider']->id)))
         {
             // not creator of the membership
             // not owner of the provider

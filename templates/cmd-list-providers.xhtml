@@ -1,4 +1,9 @@
-<div class="provider" tal:condition="true: com_meego_devprogram/provider" tal:define="provider com_meego_devprogram/provider">
+<div class="info" tal:condition="not: com_meego_devprogram/providers">
+    <div class="status" i18n:translate="'feedback_no_providers'"></div>
+    <a class="back" tal:attributes="href com_meego_devprogram/index_url" i18n:translate="'command_back_to_index'"></a>
+</div>
+
+<div class="provider" tal:condition="true: com_meego_devprogram/providers" tal:repeat="provider com_meego_devprogram/providers">
 
     <h2 class="title">
         <a tal:attributes="href provider/url">${provider/title}</a>
@@ -13,19 +18,6 @@
 
         <div class="website">
             <a class="label" tal:attributes="href provider/url" i18n:translate="'label_provider_url'"></a>
-        </div>
-
-        <div class="name">
-            <div class="label" i18n:translate="'label_provider_primarycontactname'"></div>
-            ${provider/primarycontactname}
-        </div>
-        <div class="email">
-            <div class="label" i18n:translate="'label_provider_primarycontactemail'"></div>
-            ${provider/primarycontactemail}
-        </div>
-        <div class="phone">
-            <div class="label" i18n:translate="'label_provider_primarycontactphone'"></div>
-            ${provider/primarycontactphone}
         </div>
 
         <ul class="toolbar" tal:condition="provider/can_manage">
@@ -47,5 +39,4 @@
         </ul>
 
     </div>
-
 </div>

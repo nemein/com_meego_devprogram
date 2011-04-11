@@ -26,15 +26,33 @@ class com_meego_devprogram_provutils extends com_meego_devprogram_utils
         // if current user is owner then we can add more goodies
         $user = com_meego_devprogram_utils::get_current_user();
 
-        if (is_object($user))
+        $provider->number_of_members = false;
+
+        $mvc = midgardmvc_core::get_instance();
+
+        // set the can join flag to true by default
+        $provider->can_join = true;
+
+        // set management fflag to false by default
+        $provider->can_manage = false;
+
+        // can current user manage the provider
+        if (   com_meego_devprogram_utils::is_current_user_creator_or_admin($object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($object->id))
         {
-            if ($provider->metadata->creator == $user->person)
-            {
-                $provider->list_memberships_url = com_meego_devprogram_utils::get_url('provider_members', array ('provider_name' => $provider->name));
-                // set the number of members (all but the cancelled ones) of this provider
-                $provider->number_of_members = count(com_meego_devprogram_membutils::get_memberships_by_provider($provider->id));
-            }
+            $provider->can_manage = true;
+            $provider->can_join = false;
+
+            // set the url for the membership list page
+            $provider->list_memberships_url = com_meego_devprogram_utils::get_url('provider_members', array ('provider_name' => $provider->name));
+            // set the approved number of members (all but the cancelled ones) of this provider
+            $provider->number_of_members = count(com_meego_devprogram_membutils::get_memberships_by_provider($provider->id));
+            // set the number of pending membership requests
+            $provider->number_of_members = count(com_meego_devprogram_membutils::get_memberships_by_provider($provider->id));
         }
+
+        // can the provider be deleted; ie. check if provider has devices that belong to open programs
+        $provider->can_not_delete = com_meego_devprogram_provutils::has_provider_devices($object->id);
 
         return $provider;
     }
@@ -94,10 +112,16 @@ class com_meego_devprogram_provutils extends com_meego_devprogram_utils
             }
 
             // set the constraint
-            (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
+            if (isset($constraint))
+            {
+                (count($filters) > 1) ? $qc->add_constraint($constraint) : $qc = $constraint;
+            }
         }
 
-        $q->set_constraint($qc);
+        if (isset($qc))
+        {
+            $q->set_constraint($qc);
+        }
 
         $q->add_order(new midgard_query_property('metadata.created'), SORT_DESC);
 

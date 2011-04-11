@@ -109,7 +109,8 @@ class com_meego_devprogram_controllers_providers extends midgardmvc_core_control
         $this->load_object($args);
 
         // check if user owns the program or he / she is an admin
-        if (! com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        if (   ! (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($this->object->id)))
         {
             // nice try, redirect to standard read page
             $this->relocate_to_read();
@@ -128,36 +129,23 @@ class com_meego_devprogram_controllers_providers extends midgardmvc_core_control
      *
      * @param array args (not used)
      */
+    public function get_list(array $args)
+    {
+        $this->data['providers'] = com_meego_devprogram_provutils::get_providers(array(1=>1));
+    }
+
+    /**
+     * Prepares and shows the provider details page (cmd-provider-details)
+     *
+     * Access: anyone can read the provider details
+     *         owners will get extra options on the page
+     *
+     * @param array args (not used)
+     */
     public function get_read(array $args)
     {
         $this->load_object($args);
-
-        $this->data['can_join'] = true;
-
         $this->data['provider'] = $this->object;
-
-        $this->data['can_manage'] = com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object);
-
-        // check if provider has devices that belong t open programs
-        $this->data['can_not_delete'] = com_meego_devprogram_provutils::has_provider_devices($this->object->id);
-
-        if (com_meego_devprogram_utils::is_current_user_creator($this->object))
-        {
-            // owners of a program or admins should not apply for that program
-            $this->data['can_join'] = false;
-        }
-        elseif ($this->mvc->authentication->is_user())
-        {
-            // check if the user has requested membership already
-            // display a warning if yes
-            $this->data['mymemberships'] = com_meego_devprogram_membutils::get_memberships_of_current_user($this->object->id);
-
-            if (count($this->data['mymemberships']))
-            {
-                // if requested membership then we disable th join button
-                $this->data['can_join'] = false;
-            }
-        }
     }
 
     /**
@@ -268,7 +256,10 @@ class com_meego_devprogram_controllers_providers extends midgardmvc_core_control
      */
     public function get_update(array $args)
     {
-        if (com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object))
+        $this->load_object($args);
+
+        if (   com_meego_devprogram_utils::is_current_user_creator_or_admin($this->object)
+            || com_meego_devprogram_membutils::is_current_user_member_of_provider($this->object->id))
         {
             // if creator
             // or admin
