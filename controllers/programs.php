@@ -45,6 +45,11 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             $this->data['program'] = $this->object;
             midgardmvc_core::get_instance()->head->set_title($this->object->title);
         }
+        else
+        {
+            // hmm bail out
+            throw new midgardmvc_exception_notfound("Developer device program not found");
+        }
     }
 
     /**
@@ -195,37 +200,7 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
      */
     public function get_read(array $args)
     {
-        $this->data['myapps'] = null;
-        $this->data['can_apply'] = true;
-
         $this->load_object($args);
-
-        if (! is_object($this->object))
-        {
-            // hmm bail out
-            throw new midgardmvc_exception_notfound("Developer device program not found");
-        }
-
-        if (com_meego_devprogram_utils::is_current_user_creator($this->object))
-        {
-            // owners of a program or admins should not apply for that program
-            $this->data['can_apply'] = false;
-        }
-        elseif ($this->mvc->authentication->is_user())
-        {
-            // check if the user has applied for the program and
-            // display a warning if yes
-            // in case of multiple applications we only refer to the 1st
-            $this->data['myapps'] = com_meego_devprogram_apputils::get_applications_of_current_user($this->object->id);
-
-            if (   count($this->data['myapps'])
-                && ! $this->object->multiple)
-            {
-                // if applied then we disable further applications
-                // unless the program accepts multiple entries from the same person
-                $this->data['can_apply'] = false;
-            }
-        }
     }
 
     /**
