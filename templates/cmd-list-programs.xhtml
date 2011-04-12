@@ -5,20 +5,25 @@
     <a class="back" tal:attributes="href com_meego_devprogram/index_url" i18n:translate="'command_back_to_index'"></a>
 </div>
 
-<div class="list" tal:condition="true: com_meego_devprogram/programs">
+<div class="program" tal:condition="true: com_meego_devprogram/programs" tal:repeat="program com_meego_devprogram/programs">
 
-    <h2 i18n:translate="'title_list_of_open_programs'"></h2>
+    <h2 class="title">
+        <a tal:attributes="href program/read_url">${program/title}</a>
+    </h2>
 
-    <ul class="programs">
-        <li class="program" tal:repeat="program com_meego_devprogram/programs">
-            <div class="brief">
-                    <h3>${program/title}</h3>
-                    <div class="summary">${program/summary}</div>
-            </div>
-            <div class="actions">
+    <div class="briefing">
+
+        <div class="summary">
+            <div class="label" i18n:translate="'label_program_summary'"></div>
+            ${program/summary}
+        </div>
+
+        <ul class="toolbar">
+            <li>
                 <a class="action" tal:attributes="href program/read_url" i18n:translate="'command_read_details'"></a>
-            </div>
-        </li>
-    </ul>
+            </li>
+        </ul>
+
+    </div>
 
 </div>

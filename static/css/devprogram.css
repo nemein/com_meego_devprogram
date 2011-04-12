@@ -107,11 +107,6 @@ div.deadline span {
 font-weight: bold;
 }
 
-div.program div.summary {
-margin: 0 0 1em 0;
-font-style: italic;
-}
-
 ul.toolbar {
 margin: 1em 0 0 0;
 padding: 0;
@@ -261,11 +256,8 @@ margin: 1em 0 1em 0;
 text-align: justify;
 }
 
-div.device div .label,
-div.provider div .label,
-div.application div.submitter .label,
-div.application div.provider .label,
-div.application div.reason .label {
+a.label,
+div.label {
 font-weight: bold;
 margin: 0 0 0.5em 0;
 }
@@ -279,6 +271,12 @@ div.application .reason {
 margin: 1em 0 0 0;
 }
 
-div.provider div.briefing {
+div.application div.briefing,
+div.provider div.briefing,
+div.program div.briefing {
 margin: 1em;
+}
+
+div.description {
+margin: 1em 0 1em 0;
 }

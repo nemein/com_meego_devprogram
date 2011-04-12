@@ -2,7 +2,7 @@
 
     <h2 class="title">${program/title}</h2>
 
-    <div class="status" tal:condition="true: com_meego_devprogram/myapps" tal:define="myapps com_meego_devprogram/myapps">
+    <div class="status" tal:condition="true: program/myapps" tal:define="myapps program/myapps">
         <span i18n:translate="'note_already_applied_for_program'"></span>
         <span i18n:translate="'note_current_applications'"></span>
         <ul>
@@ -12,18 +12,29 @@
         </ul>
     </div>
 
-    <div class="deadline" i18n:translate="'note_application_deadline'">
-        <span i18n:name="deadline">${program/deadline}</span>
+    <div class="briefing">
+
+        <div class="deadline">
+            <div class="label" i18n:translate="'label_program_deadline'"></div>
+            ${program/deadline}
+        </div>
+
+        <div class="summary">
+            <div class="label" i18n:translate="'label_program_summary'"></div>
+            ${program/summary}
+        </div>
+
+        <div class="description">
+            <div class="label" i18n:translate="'label_program_description'"></div>
+            ${program/description}
+        </div>
+
+        <ul class="toolbar" tal:condition="program/can_apply">
+            <li>
+                <a class="action" tal:attributes="href program/apply_url" i18n:translate="'command_apply_for_program'"></a>
+            </li>
+        </ul>
+
     </div>
-
-    <div class="summary">${program/summary}</div>
-
-    <div class="description">${program/description}</div>
-
-    <ul class="toolbar" tal:condition="com_meego_devprogram/can_apply">
-        <li>
-            <a class="action" tal:attributes="href program/apply_url" i18n:translate="'command_apply_for_program'"></a>
-        </li>
-    </ul>
 
 </div>

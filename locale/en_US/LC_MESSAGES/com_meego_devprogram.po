@@ -214,6 +214,9 @@ msgstr "Withdraw application"
 msgid "note_application_deadline"
 msgstr "Deadline: ${deadline}"
 
+msgid "label_program_deadline"
+msgstr "Deadline"
+
 msgid "title_application_form"
 msgstr "Application Form for ${program}"
 
