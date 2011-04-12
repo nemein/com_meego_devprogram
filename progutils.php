@@ -27,6 +27,9 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         // reformat the duedate value so that templates and controllers don't have to bother
         $program->deadline = date('Y-m-d', strtotime($program->duedate));
 
+        // create a placeholder for applications to this program by the curent user
+        $program->myapps = array();
+
         // if current user is owner then we can add more goodies
         $user = com_meego_devprogram_utils::get_current_user();
 
@@ -36,6 +39,9 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             $program->list_apps_url = com_meego_devprogram_utils::get_url('program_applications', array ('program_name' => $program->name));
             // set the number of apps (all but the cancelled ones) under this program
             $program->number_of_applications = com_meego_devprogram_apputils::get_count_applications_by_program($program->id);
+
+            // gather all apps of this user to this program
+            //$program->myapps = com_meego_devprogram_apputils::get_applications_of_current_user($object->id);
         }
 
         // get the provider of the device and set a new property to the program
@@ -43,6 +49,20 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         $providers = com_meego_devprogram_provutils::get_providers(array('guid' => $devices[0]->providerobject->guid));
 
         $program->provider = $providers[0];
+
+        // by default everybody can apply
+        $program->can_apply = true;
+
+        if (   com_meego_devprogram_utils::is_current_user_creator($object)
+            || (   count($program->myapps)
+                && ! $object->multiple))
+        {
+            // owners of a program or admins should not apply for that program
+            // or
+            // if user applied then we disable further applications
+            // unless the program accepts multiple entries from the same person
+            $program->can_apply = false;
+        }
 
         return $program;
     }
