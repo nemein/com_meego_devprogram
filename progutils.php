@@ -363,7 +363,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
             $daysleft = $mvc->configuration->daysleft;
         }
 
-        $programs = self::get_programs(array('daysleft' => $daysleft));
+        $programs = self::get_programs(array('status' => CMD_PROGRAM_OPEN, 'daysleft' => $daysleft));
 
         return $programs;
     }
