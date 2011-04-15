@@ -520,3 +520,7 @@ msgstr "URL pointing to a custom form where the program accepts applications"
 msgid "feedback_no_providers"
 msgstr "Currently there are no providers registered. Please try again later or register one now."
 
+msgid "note_program_already_closed"
+msgstr "The developer program has already been closed."
+
+

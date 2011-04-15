@@ -19,6 +19,7 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         $program = new com_meego_devprogram_program($object->guid);
 
         // set some urls, they can come handy
+        $program->open_programs_url = com_meego_devprogram_utils::get_url('open_programs', array ());
         $program->read_url = com_meego_devprogram_utils::get_url('program_read', array ('program_name' => $program->name));
         $program->update_url = com_meego_devprogram_utils::get_url('program_update', array ('program_name' => $program->name));
         $program->delete_url = com_meego_devprogram_utils::get_url('program_delete', array ('program_name' => $program->name));
@@ -53,9 +54,19 @@ class com_meego_devprogram_progutils extends com_meego_devprogram_utils
         // by default everybody can apply
         $program->can_apply = true;
 
+        // current date and time
+        $now = new DateTime();
+
+        if ($object->duedate < $now)
+        {
+            // set the flag so we can show a user friendly status box
+            $program->closed = true;
+        }
+
         if (   com_meego_devprogram_utils::is_current_user_creator($object)
             || (   count($program->myapps)
-                && ! $object->multiple))
+                && ! $object->multiple)
+            || ($object->duedate < $now))
         {
             // owners of a program or admins should not apply for that program
             // or

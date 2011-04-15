@@ -192,8 +192,11 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
         // in case of multiple applications we only refer to the 1st
         $this->data['myapps'] = com_meego_devprogram_apputils::get_applications_of_current_user($program->id);
 
-        if (   ! count($this->data['myapps'])
-            || $program->multiple)
+        $now = new DateTime();
+
+        if (   $program->duedate >= $now
+            && (   ! count($this->data['myapps'])
+                || $program->multiple))
         {
             // we move on if user has not applied or
             // the program accepts multiple entries from the same person
