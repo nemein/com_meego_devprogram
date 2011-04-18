@@ -523,4 +523,5 @@ msgstr "Currently there are no providers registered. Please try again later or r
 msgid "note_program_already_closed"
 msgstr "The developer program has already been closed."
 
-
+msgid "question_program_delete"
+msgstr "Are you sure you want to delete the program: ${program_name}?"

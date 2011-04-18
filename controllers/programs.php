@@ -308,5 +308,17 @@ class com_meego_devprogram_controllers_programs extends midgardmvc_core_controll
             $this->relocate_to_read();
         }
     }
+
+    /**
+     * Prepares the delete page
+     */
+    public function get_delete(array $args)
+    {
+        parent::get_delete($args);
+
+        $this->data['index_url'] = com_meego_devprogram_utils::get_url('index', array());
+        $this->data['can_not_delete'] = false;
+        $this->data['delete_question'] = $this->mvc->i18n->get('question_program_delete', null, array('program_name' => $this->data['program']->title));
+    }
 }
 ?>
