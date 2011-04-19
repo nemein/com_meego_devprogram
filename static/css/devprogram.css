@@ -48,6 +48,14 @@ width: 40em;
 height: 15em;
 }
 
+div.edit textarea[name=summary] {
+height: 7em;
+}
+
+div.edit textarea[name=plan] {
+height: 11em;
+}
+
 div.edit input.form-submit {
 margin: 1em 0 0 0;
 min-width: 5em;
@@ -279,4 +287,12 @@ margin: 1em;
 
 div.description {
 margin: 1em 0 1em 0;
+}
+
+span.summarycounter,
+span.plancounter {
+text-decoration: italic;
+color: grey;
+margin: 0 -10em 0 0;
+
 }

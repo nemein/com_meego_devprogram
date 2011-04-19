@@ -202,6 +202,10 @@ class com_meego_devprogram_controllers_applications extends midgardmvc_core_cont
             // the program accepts multiple entries from the same person
             parent::get_create($args);
         }
+
+        // load the text limiter js files
+        $this->mvc->head->add_jsfile(MIDGARDMVC_STATIC_URL . '/' . $this->component . '/js/textLimit.js');
+        $this->mvc->head->add_jsfile(MIDGARDMVC_STATIC_URL . '/' . $this->component . '/js/limiter_for_applications.js');
     }
 
     /**

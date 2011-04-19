@@ -196,12 +196,12 @@
             <description>Developer device program this application is submitted for</description>
             <required>true</required>
         </property>
-        <property name="summary" type="longtext">
-            <description>Short description of the idea represented by the application</description>
+        <property name="summary" type="longtext" dbtype="varchar(200)">
+            <description>Short description (max. 200 characters) of the idea represented by the application</description>
             <required>true</required>
         </property>
-        <property name="plan" type="longtext">
-            <description>Longer description of the plan with the device</description>
+        <property name="plan" type="longtext" dbtype="varchar(500)">
+            <description>Longer description (max. 500 characters) of the plan with the device</description>
             <required>true</required>
         </property>
         <property name="project" type="string">
